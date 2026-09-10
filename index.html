@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Cluj Events</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #111;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: none;
+    }
+
+    #screen {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 0.4s ease;
+    }
+
+    #screen.event::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.48);
+      z-index: 1;
+    }
+
+    #eventContent {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 60px;
+      color: white;
+    }
+
+    #eventContent.visible {
+      display: flex;
+    }
+
+    #status {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      margin-bottom: 25px;
+      padding: 12px 26px;
+      border: 3px solid white;
+      border-radius: 12px;
+    }
+
+    #eventTitle {
+      font-size: 72px;
+      line-height: 1.05;
+      font-weight: 800;
+      max-width: 1100px;
+      text-shadow: 0 4px 18px rgba(0,0,0,.65);
+    }
+
+    #eventTime {
+      margin-top: 28px;
+      font-size: 30px;
+      font-weight: 500;
+      text-shadow: 0 3px 12px rgba(0,0,0,.7);
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="screen">
+  <div id="eventContent">
+    <div id="status">IN PROGRESS</div>
+    <div id="eventTitle"></div>
+    <div id="eventTime"></div>
+  </div>
+</div>
+
+<script>
+
+  /*
+    ============================================================
+    SETTINGS
+    ============================================================
+
+    Later we will replace this section with your proper ADMIN
+    page where you can upload images and create events.
+
+    For this first version:
+      idle.jpg   = generic background
+      event1.jpg = background for first event
+      event2.jpg = background for second event
+      event3.jpg = background for third event
+  */
+
+  const DEFAULT_BACKGROUND = "idle.jpg";
+
+  const EVENTS = [
+    {
+      title: "Morning Event",
+      start: "10:00",
+      end: "11:00",
+      background: "event1.jpg"
+    },
+
+    {
+      title: "Afternoon Event",
+      start: "15:00",
+      end: "16:00",
+      background: "event2.jpg"
+    },
+
+    {
+      title: "Evening Event",
+      start: "17:00",
+      end: "18:00",
+      background: "event3.jpg"
+    }
+  ];
+
+  const screen = document.getElementById("screen");
+  const eventContent = document.getElementById("eventContent");
+  const eventTitle = document.getElementById("eventTitle");
+  const eventTime = document.getElementById("eventTime");
+
+  function bucharestTime() {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Bucharest",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).formatToParts(new Date());
+
+    const hour = Number(parts.find(p => p.type === "hour").value);
+    const minute = Number(parts.find(p => p.type === "minute").value);
+
+    return hour * 60 + minute;
+  }
+
+  function timeToMinutes(value) {
+    const [hour, minute] = value.split(":").map(Number);
+    return hour * 60 + minute;
+  }
+
+  function getCurrentEvent() {
+
+    const currentMinutes = bucharestTime();
+
+    for (const event of EVENTS) {
+
+      const start = timeToMinutes(event.start);
+      const end = timeToMinutes(event.end);
+
+      if (currentMinutes >= start && currentMinutes < end) {
+        return event;
+      }
+    }
+
+    return null;
+  }
+
+  function setBackground(image) {
+    screen.style.backgroundImage =
+      `linear-gradient(#111,#111), url("${image}")`;
+
+    const test = new Image();
+
+    test.onload = function () {
+      screen.style.backgroundImage = `url("${image}")`;
+    };
+
+    test.src = image;
+  }
+
+  function updateDisplay() {
+
+    const event = getCurrentEvent();
+
+    if (event) {
+
+      screen.classList.add("event");
+
+      setBackground(event.background);
+
+      eventTitle.textContent = event.title;
+
+      eventTime.textContent =
+        `${event.start} – ${event.end}`;
+
+      eventContent.classList.add("visible");
+
+    } else {
+
+      screen.classList.remove("event");
+
+      setBackground(DEFAULT_BACKGROUND);
+
+      eventContent.classList.remove("visible");
+    }
+  }
+
+  updateDisplay();
+
+  // Check every 15 seconds
+  setInterval(updateDisplay, 15000);
+
+</script>
+
+</body>
+</html>
