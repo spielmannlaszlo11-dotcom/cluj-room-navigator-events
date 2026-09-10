@@ -1,225 +1,1185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Cluj Events</title>
+<meta charset="UTF-8">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<title>Cluj Events</title>
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #111;
-      font-family: Arial, Helvetica, sans-serif;
-      cursor: none;
-    }
+<style>
 
-    #screen {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      transition: background-image 0.4s ease;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    #screen.event::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.48);
-      z-index: 1;
-    }
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #061735;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-    #eventContent {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 60px;
-      color: white;
-    }
+body {
+  user-select: none;
+  -webkit-user-select: none;
+}
 
-    #eventContent.visible {
-      display: flex;
-    }
+/* ============================================================
+   MAIN SCREEN
+   ============================================================ */
 
-    #status {
-      font-size: 34px;
-      font-weight: 800;
-      letter-spacing: 5px;
-      margin-bottom: 25px;
-      padding: 12px 26px;
-      border: 3px solid white;
-      border-radius: 12px;
-    }
+#screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 25% 20%, #174d97 0%, transparent 45%),
+    linear-gradient(145deg, #0b3471 0%, #031329 100%);
+}
 
-    #eventTitle {
-      font-size: 72px;
-      line-height: 1.05;
-      font-weight: 800;
-      max-width: 1100px;
-      text-shadow: 0 4px 18px rgba(0,0,0,.65);
-    }
+/* ============================================================
+   IDLE MODE
+   ============================================================ */
 
-    #eventTime {
-      margin-top: 28px;
-      font-size: 30px;
-      font-weight: 500;
-      text-shadow: 0 3px 12px rgba(0,0,0,.7);
-    }
-  </style>
+#idleMode {
+  position: absolute;
+  inset: 0;
+  display: none;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#idleMode.visible {
+  display: block;
+}
+
+.idle-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.66) 0%,
+      rgba(0,0,0,.42) 55%,
+      rgba(0,0,0,.20) 100%
+    );
+}
+
+.idle-vignette {
+  position: absolute;
+  inset: 0;
+
+  box-shadow:
+    inset 0 0 180px rgba(0,0,0,.48);
+}
+
+.idle-content {
+  position: absolute;
+  z-index: 3;
+
+  left: 7%;
+  right: 7%;
+  top: 8%;
+  bottom: 8%;
+
+  display: flex;
+  flex-direction: column;
+
+  color: white;
+}
+
+.idle-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 55px;
+}
+
+.today-title {
+  font-size: 82px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.today-date {
+  font-size: 30px;
+  font-weight: 500;
+  opacity: .85;
+  padding-bottom: 8px;
+}
+
+#schedule {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  flex: 1;
+
+  max-width: 1500px;
+}
+
+.schedule-row {
+  display: grid;
+
+  grid-template-columns: 360px 1fr;
+
+  align-items: center;
+
+  padding: 25px 0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.20);
+}
+
+.schedule-row:last-child {
+  border-bottom: none;
+}
+
+.schedule-time {
+  font-size: 45px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  opacity: .92;
+}
+
+.schedule-title {
+  font-size: 50px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+#schedule.many .schedule-row {
+  padding: 16px 0;
+}
+
+#schedule.many .schedule-time {
+  font-size: 35px;
+}
+
+#schedule.many .schedule-title {
+  font-size: 39px;
+}
+
+.no-events {
+  font-size: 72px;
+  font-weight: 800;
+  letter-spacing: 3px;
+
+  opacity: .95;
+}
+
+/* ============================================================
+   EVENT MODE
+   ============================================================ */
+
+#eventMode {
+  position: absolute;
+  inset: 0;
+
+  display: none;
+
+  background: #06152e;
+}
+
+#eventMode.visible {
+  display: flex;
+}
+
+/* LEFT HALF */
+
+#eventLeft {
+  position: relative;
+
+  width: 50%;
+  height: 100%;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+}
+
+/*
+   Soft blend where the left image meets the right side.
+   No harsh vertical cut.
+*/
+
+#eventLeft::after {
+  content: "";
+
+  position: absolute;
+
+  right: -70px;
+  top: 0;
+  bottom: 0;
+
+  width: 150px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0,0,0,.15) 35%,
+      rgba(0,0,0,.72) 100%
+    );
+
+  filter: blur(16px);
+
+  z-index: 4;
+
+  pointer-events: none;
+}
+
+/* RIGHT HALF */
+
+#eventRight {
+  position: relative;
+
+  width: 50%;
+  height: 100%;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+/* Overall dark treatment for right background */
+
+#eventRight::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,0,0,.22),
+      rgba(0,0,0,.55)
+    );
+
+  z-index: 1;
+}
+
+/* Vignette */
+
+#eventRight::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  box-shadow:
+    inset 0 0 140px rgba(0,0,0,.42);
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+/* TOP RIGHT */
+
+.event-information {
+  position: relative;
+  z-index: 5;
+
+  width: 100%;
+  height: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 75px;
+
+  color: white;
+}
+
+#eventTitle {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.05;
+
+  max-width: 800px;
+
+  text-shadow:
+    0 5px 22px rgba(0,0,0,.72);
+}
+
+#eventTime {
+  margin-top: 32px;
+
+  font-size: 39px;
+  font-weight: 500;
+  letter-spacing: 2px;
+
+  text-shadow:
+    0 4px 16px rgba(0,0,0,.75);
+}
+
+/* Soft horizontal transition instead of hard split */
+
+.event-status::before {
+  content: "";
+
+  position: absolute;
+
+  top: -70px;
+  left: 0;
+  right: 0;
+
+  height: 140px;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(0,0,0,.42),
+      transparent
+    );
+
+  filter: blur(18px);
+
+  pointer-events: none;
+}
+
+/* BOTTOM RIGHT */
+
+.event-status {
+  position: relative;
+  z-index: 5;
+
+  width: 100%;
+  height: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 60px;
+
+  color: white;
+}
+
+#progressText {
+  font-size: 74px;
+  font-weight: 900;
+
+  letter-spacing: 5px;
+
+  text-shadow:
+    0 5px 25px rgba(0,0,0,.8);
+}
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+#errorMessage {
+  position: absolute;
+
+  bottom: 25px;
+  right: 30px;
+
+  z-index: 100;
+
+  color: rgba(255,255,255,.65);
+
+  font-size: 18px;
+
+  display: none;
+}
+
+</style>
 </head>
 
 <body>
 
 <div id="screen">
-  <div id="eventContent">
-    <div id="status">IN PROGRESS</div>
-    <div id="eventTitle"></div>
-    <div id="eventTime"></div>
+
+  <!-- ======================================================
+       IDLE SCREEN
+       ====================================================== -->
+
+  <div id="idleMode">
+
+    <div class="idle-overlay"></div>
+    <div class="idle-vignette"></div>
+
+    <div class="idle-content">
+
+      <div class="idle-header">
+
+        <div class="today-title">
+          TODAY
+        </div>
+
+        <div
+          id="todayDate"
+          class="today-date">
+        </div>
+
+      </div>
+
+      <div id="schedule"></div>
+
+    </div>
+
   </div>
+
+
+  <!-- ======================================================
+       EVENT SCREEN
+       ====================================================== -->
+
+  <div id="eventMode">
+
+    <div id="eventLeft"></div>
+
+
+    <div id="eventRight">
+
+      <div class="event-information">
+
+        <div id="eventTitle"></div>
+
+        <div id="eventTime"></div>
+
+      </div>
+
+
+      <div class="event-status">
+
+        <div id="progressText">
+          IN PROGRESS
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div id="errorMessage">
+    Schedule temporarily unavailable
+  </div>
+
 </div>
+
 
 <script>
 
+/* ============================================================
+   SUPABASE
+   ============================================================ */
+
+const SUPABASE_URL =
+  'https://wdcrihymqrbiljncxvbs.supabase.co';
+
+/*
+  IMPORTANT:
+
+  Paste the SAME sb_publishable_... key
+  that you used in admin.html.
+
+  Do NOT use a Secret Key.
+*/
+
+const SUPABASE_KEY =
+  'sb_publishable_WRI3MJLwDSP4wJscWdBmhA_t50js1al';
+
+
+/* ============================================================
+   IDLE BACKGROUND
+   ============================================================ */
+
+/*
+  This is the fixed location we will use for your
+  uploaded idle background.
+
+  Until you upload one there, the built-in blue
+  gradient fallback will appear.
+*/
+
+const IDLE_BACKGROUND_URL =
+  SUPABASE_URL +
+  '/storage/v1/object/public/event-assets/idle/idle-background';
+
+
+/* ============================================================
+   STATE
+   ============================================================ */
+
+let todaysEvents = [];
+
+let dataLoaded = false;
+
+let lastSuccessfulLoad = null;
+
+
+/* ============================================================
+   ELEMENTS
+   ============================================================ */
+
+const idleMode =
+  document.getElementById('idleMode');
+
+const eventMode =
+  document.getElementById('eventMode');
+
+const schedule =
+  document.getElementById('schedule');
+
+const todayDate =
+  document.getElementById('todayDate');
+
+const eventLeft =
+  document.getElementById('eventLeft');
+
+const eventRight =
+  document.getElementById('eventRight');
+
+const eventTitle =
+  document.getElementById('eventTitle');
+
+const eventTime =
+  document.getElementById('eventTime');
+
+const errorMessage =
+  document.getElementById('errorMessage');
+
+
+/* ============================================================
+   BUCHAREST DATE / TIME
+   ============================================================ */
+
+function getBucharestParts() {
+
+  const formatter =
+    new Intl.DateTimeFormat(
+      'en-GB',
+      {
+        timeZone: 'Europe/Bucharest',
+
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+
+        hour: '2-digit',
+        minute: '2-digit',
+
+        hour12: false
+      }
+    );
+
+
+  const parts =
+    formatter.formatToParts(
+      new Date()
+    );
+
+
+  const value =
+    type =>
+      parts.find(
+        part =>
+          part.type === type
+      )?.value;
+
+
+  return {
+
+    year:
+      value('year'),
+
+    month:
+      value('month'),
+
+    day:
+      value('day'),
+
+    hour:
+      Number(
+        value('hour')
+      ),
+
+    minute:
+      Number(
+        value('minute')
+      )
+
+  };
+
+}
+
+
+function getTodayDateString() {
+
+  const p =
+    getBucharestParts();
+
+  return (
+    `${p.year}-${p.month}-${p.day}`
+  );
+
+}
+
+
+function getCurrentMinutes() {
+
+  const p =
+    getBucharestParts();
+
+  return (
+    p.hour * 60 +
+    p.minute
+  );
+
+}
+
+
+function timeToMinutes(time) {
+
+  if (!time)
+    return 0;
+
+
+  const pieces =
+    time.split(':');
+
+
+  return (
+    Number(pieces[0]) * 60 +
+    Number(pieces[1])
+  );
+
+}
+
+
+function cleanTime(time) {
+
+  if (!time)
+    return '';
+
+  return time.substring(0,5);
+
+}
+
+
+/* ============================================================
+   TODAY LABEL
+   ============================================================ */
+
+function updateTodayLabel() {
+
+  const formatter =
+    new Intl.DateTimeFormat(
+      'en-GB',
+      {
+        timeZone:
+          'Europe/Bucharest',
+
+        weekday:
+          'long',
+
+        day:
+          'numeric',
+
+        month:
+          'long'
+      }
+    );
+
+
+  todayDate.textContent =
+    formatter
+      .format(new Date())
+      .toUpperCase();
+
+}
+
+
+/* ============================================================
+   FETCH EVENTS
+   ============================================================ */
+
+async function loadEvents() {
+
+  const today =
+    getTodayDateString();
+
+
+  const query =
+    new URL(
+      SUPABASE_URL +
+      '/rest/v1/events'
+    );
+
+
+  query.searchParams.set(
+    'select',
+    '*'
+  );
+
+
+  query.searchParams.set(
+    'event_date',
+    'eq.' + today
+  );
+
+
+  query.searchParams.set(
+    'order',
+    'start_time.asc'
+  );
+
+
+  try {
+
+    const response =
+      await fetch(
+        query.toString(),
+        {
+          method:
+            'GET',
+
+          headers: {
+            'apikey':
+              SUPABASE_KEY
+          },
+
+          cache:
+            'no-store'
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        'Supabase HTTP ' +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    todaysEvents =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    dataLoaded =
+      true;
+
+
+    lastSuccessfulLoad =
+      Date.now();
+
+
+    errorMessage.style.display =
+      'none';
+
+
+    render();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      'Schedule load error:',
+      error
+    );
+
+
+    /*
+      If we already loaded the schedule once,
+      keep showing the previous data rather
+      than suddenly blanking the Navigator.
+    */
+
+    if (!dataLoaded) {
+
+      errorMessage.style.display =
+        'block';
+
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   CURRENT EVENT
+   ============================================================ */
+
+function getCurrentEvent() {
+
+  const now =
+    getCurrentMinutes();
+
+
+  return (
+    todaysEvents.find(
+      event => {
+
+        const start =
+          timeToMinutes(
+            event.start_time
+          );
+
+        const end =
+          timeToMinutes(
+            event.end_time
+          );
+
+
+        return (
+          now >= start &&
+          now < end
+        );
+
+      }
+    )
+    || null
+  );
+
+}
+
+
+/* ============================================================
+   IDLE MODE
+   ============================================================ */
+
+function showIdle() {
+
+  eventMode.classList.remove(
+    'visible'
+  );
+
+
+  idleMode.classList.add(
+    'visible'
+  );
+
+
   /*
-    ============================================================
-    SETTINGS
-    ============================================================
+    The first background is a built-in fallback.
 
-    Later we will replace this section with your proper ADMIN
-    page where you can upload images and create events.
-
-    For this first version:
-      idle.jpg   = generic background
-      event1.jpg = background for first event
-      event2.jpg = background for second event
-      event3.jpg = background for third event
+    The second layer attempts to load your uploaded
+    Supabase idle image.
   */
 
-  const DEFAULT_BACKGROUND = "idle.jpg";
+  idleMode.style.backgroundImage =
+    `
+    linear-gradient(
+      rgba(4,17,42,.20),
+      rgba(4,17,42,.20)
+    ),
+    url("${IDLE_BACKGROUND_URL}?v=${Date.now()}")
+    `;
 
-  const EVENTS = [
-    {
-      title: "Morning Event",
-      start: "10:00",
-      end: "11:00",
-      background: "event1.jpg"
-    },
 
-    {
-      title: "Afternoon Event",
-      start: "15:00",
-      end: "16:00",
-      background: "event2.jpg"
-    },
+  renderSchedule();
 
-    {
-      title: "Evening Event",
-      start: "17:00",
-      end: "18:00",
-      background: "event3.jpg"
+}
+
+
+/* ============================================================
+   DAILY SCHEDULE
+   ============================================================ */
+
+function renderSchedule() {
+
+  schedule.innerHTML =
+    '';
+
+
+  schedule.classList.remove(
+    'many'
+  );
+
+
+  if (
+    todaysEvents.length === 0
+  ) {
+
+    const message =
+      document.createElement(
+        'div'
+      );
+
+
+    message.className =
+      'no-events';
+
+
+    message.textContent =
+      'NO EVENTS';
+
+
+    schedule.appendChild(
+      message
+    );
+
+
+    return;
+
+  }
+
+
+  if (
+    todaysEvents.length > 5
+  ) {
+
+    schedule.classList.add(
+      'many'
+    );
+
+  }
+
+
+  todaysEvents.forEach(
+    event => {
+
+      const row =
+        document.createElement(
+          'div'
+        );
+
+
+      row.className =
+        'schedule-row';
+
+
+      const time =
+        document.createElement(
+          'div'
+        );
+
+
+      time.className =
+        'schedule-time';
+
+
+      time.textContent =
+        `${cleanTime(event.start_time)} – ${cleanTime(event.end_time)}`;
+
+
+      const title =
+        document.createElement(
+          'div'
+        );
+
+
+      title.className =
+        'schedule-title';
+
+
+      title.textContent =
+        event.title;
+
+
+      row.appendChild(
+        time
+      );
+
+
+      row.appendChild(
+        title
+      );
+
+
+      schedule.appendChild(
+        row
+      );
+
     }
-  ];
+  );
 
-  const screen = document.getElementById("screen");
-  const eventContent = document.getElementById("eventContent");
-  const eventTitle = document.getElementById("eventTitle");
-  const eventTime = document.getElementById("eventTime");
+}
 
-  function bucharestTime() {
-    const parts = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Europe/Bucharest",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-    }).formatToParts(new Date());
 
-    const hour = Number(parts.find(p => p.type === "hour").value);
-    const minute = Number(parts.find(p => p.type === "minute").value);
+/* ============================================================
+   EVENT MODE
+   ============================================================ */
 
-    return hour * 60 + minute;
+function showEvent(event) {
+
+  idleMode.classList.remove(
+    'visible'
+  );
+
+
+  eventMode.classList.add(
+    'visible'
+  );
+
+
+  eventTitle.textContent =
+    event.title;
+
+
+  eventTime.textContent =
+    `${cleanTime(event.start_time)} – ${cleanTime(event.end_time)}`;
+
+
+  /*
+    LEFT SIDE
+
+    Uses the uploaded Logo / Department Image.
+  */
+
+  if (event.logo_url) {
+
+    eventLeft.style.backgroundImage =
+      `url("${event.logo_url}")`;
+
   }
 
-  function timeToMinutes(value) {
-    const [hour, minute] = value.split(":").map(Number);
-    return hour * 60 + minute;
+  else {
+
+    eventLeft.style.backgroundImage =
+      `
+      linear-gradient(
+        145deg,
+        #0a4ca8,
+        #031a44
+      )
+      `;
+
   }
 
-  function getCurrentEvent() {
 
-    const currentMinutes = bucharestTime();
+  /*
+    RIGHT SIDE
 
-    for (const event of EVENTS) {
+    Both top-right and bottom-right use the SAME
+    uploaded Event Background.
+  */
 
-      const start = timeToMinutes(event.start);
-      const end = timeToMinutes(event.end);
+  if (event.background_url) {
 
-      if (currentMinutes >= start && currentMinutes < end) {
-        return event;
-      }
-    }
+    eventRight.style.backgroundImage =
+      `url("${event.background_url}")`;
 
-    return null;
   }
 
-  function setBackground(image) {
-    screen.style.backgroundImage =
-      `linear-gradient(#111,#111), url("${image}")`;
+  else {
 
-    const test = new Image();
+    eventRight.style.backgroundImage =
+      `
+      linear-gradient(
+        145deg,
+        #06377d,
+        #020d20
+      )
+      `;
 
-    test.onload = function () {
-      screen.style.backgroundImage = `url("${image}")`;
-    };
-
-    test.src = image;
   }
 
-  function updateDisplay() {
+}
 
-    const event = getCurrentEvent();
 
-    if (event) {
+/* ============================================================
+   RENDER
+   ============================================================ */
 
-      screen.classList.add("event");
+function render() {
 
-      setBackground(event.background);
+  updateTodayLabel();
 
-      eventTitle.textContent = event.title;
 
-      eventTime.textContent =
-        `${event.start} – ${event.end}`;
+  const activeEvent =
+    getCurrentEvent();
 
-      eventContent.classList.add("visible");
 
-    } else {
+  if (activeEvent) {
 
-      screen.classList.remove("event");
+    showEvent(
+      activeEvent
+    );
 
-      setBackground(DEFAULT_BACKGROUND);
-
-      eventContent.classList.remove("visible");
-    }
   }
 
-  updateDisplay();
+  else {
 
-  // Check every 15 seconds
-  setInterval(updateDisplay, 15000);
+    showIdle();
+
+  }
+
+}
+
+
+/* ============================================================
+   START
+   ============================================================ */
+
+
+/*
+  Get schedule immediately.
+*/
+
+loadEvents();
+
+
+/*
+  Re-check the screen every second.
+
+  This means it can switch to IN PROGRESS
+  right when the event starts.
+*/
+
+setInterval(
+  render,
+  1000
+);
+
+
+/*
+  Refresh Supabase every 15 seconds.
+
+  If you add/edit/delete an event from admin.html,
+  the Navigator will pick it up automatically.
+*/
+
+setInterval(
+  loadEvents,
+  15000
+);
 
 </script>
 
