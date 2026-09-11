@@ -1,375 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
-
-  <title>Room Navigator Events</title>
-
-  <style>
-
-    :root {
-
-      --flutter-navy: #16215B;
-      --flutter-blue: #0285FF;
-      --sky-blue: #CCE5FF;
-      --dark-navy: #0B112E;
-
-      --flutter-red: #D5225D;
-      --flutter-yellow: #F8CD4B;
-
-      --white: #FFFFFF;
-
-    }
-
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-
-    html,
-    body {
-
-      width: 100%;
-      height: 100%;
-
-      overflow: hidden;
-
-      background: var(--dark-navy);
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-      color: var(--white);
-
-      -webkit-user-select: none;
-      user-select: none;
-
-    }
-
-
-    #app {
-
-      width: 100vw;
-      height: 100vh;
-
-      position: relative;
-
-      overflow: hidden;
-
-    }
-
-
-
-    /* =========================================================
-       IDLE
-       ========================================================= */
-
-    .idle-screen {
-
-      position: absolute;
-      inset: 0;
-
-      width: 100%;
-      height: 100%;
-
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-
-      overflow: hidden;
-
-    }
-
-
-    .idle-screen::before {
-
-      content: "";
-
-      position: absolute;
-      inset: 0;
-
-      background:
-        linear-gradient(
-          90deg,
-          rgba(11,17,46,0.48) 0%,
-          rgba(11,17,46,0.24) 55%,
-          rgba(11,17,46,0.32) 100%
-        );
-
-      pointer-events: none;
-
-      z-index: 1;
-
-    }
-
-
-    .idle-content {
-
-      position: relative;
-
-      width: 100%;
-      height: 100%;
-
-      z-index: 2;
-
-    }
-
-
-
-    /* CLOCK + DATE */
-
-    .date-block {
-
-      position: absolute;
-
-      top: 40px;
-      right: 55px;
-
-      text-align: right;
-
-      z-index: 20;
-
-    }
-
-
-    .idle-clock {
-
-      color: var(--white);
-
-      font-size: 68px;
-
-      font-weight: 400;
-
-      line-height: 1;
-
-      margin-bottom: 16px;
-
-    }
-
-
-    .date-single-line {
-
-      color: var(--white);
-
-      font-size: 32px;
-
-      font-weight: 400;
-
-      white-space: nowrap;
-
-    }
-
-
-
-    /* AVAILABLE */
-
-    .no-events-wrapper {
-
-      position: absolute;
-      inset: 0;
-
-      display: flex;
-
-      justify-content: center;
-      align-items: center;
-
-    }
-
-
-    .no-events {
-
-      color: var(--white);
-
-      font-size: 60px;
-
-      font-weight: 400;
-
-      text-align: center;
-
-    }
-
-
-    .no-events-line {
-
-      width: 145px;
-      height: 7px;
-
-      margin: 28px auto 0;
-
-      background:
-        var(--flutter-yellow);
-
-      border-radius: 20px;
-
-    }
-
-
-
-    /* EVENT LIST */
-
-    .schedule-wrapper {
-
-      position: absolute;
-
-      left: 55px;
-      right: 55px;
-
-      top: var(--list-top);
-
-      bottom: 45px;
-
-      transform:
-        translateX(
-          var(--list-x)
-        );
-
-    }
-
-
-    .schedule {
-
-      width: 100%;
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap:
-        var(--row-gap);
-
-    }
-
-
-    .schedule-row {
-
-      width: 100%;
-
-      display: grid;
-
-      grid-template-columns:
-        250px
-        minmax(0, 1fr);
-
-      align-items: center;
-
-      min-height: 92px;
-
-      padding:
-        18px
-        28px;
-
-      background:
-        rgba(11,17,46,0.60);
-
-      border-left:
-        7px solid
-        var(--flutter-blue);
-
-      border-radius:
-        0
-        14px
-        14px
-        0;
-
-    }
-
-
-    .schedule-time {
-
-      color:
-        var(--flutter-yellow);
-
-      font-size:
-        var(--time-size);
-
-      font-weight:
-        var(--time-weight);
-
-      line-height: 1.05;
-
-      white-space: nowrap;
-
-      transform:
-        translate(
-          var(--time-x),
-          var(--time-y)
-        );
-
-    }
-
-
-    .schedule-title {
-
-      color:
-        var(--white);
-
-      font-size:
-        var(--title-size);
-
-      font-weight:
-        var(--title-weight);
-
-      line-height: 1.10;
-
-      padding-left: 60px;
-
-      white-space: normal;
-
-      overflow-wrap: break-word;
-
-      transform:
-        translate(
-          var(--title-x),
-          var(--title-y)
-        );
-
-    }
-
-
-
-    /* =========================================================
-       ACTIVE EVENT
-       ========================================================= */
-
-    .event-screen {
-
-      position: absolute;
-      inset: 0;
-
-      width: 100%;
-      height: 100%;
-
-      display: grid;
-
-      grid-template-columns:
-        50% 50%;
-
-      background:
-        var(--dark-navy);
-
-    }
-
-
-
-    /* LEFT IMAGE — FULL 960x1200 */
-
-    .event-left {
-
-      position: relative;
-
-      width: 100%;
-      height: 100%;
-
-      overflow
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Room Navigator Events</title>
+<style>
+:root{--flutter-navy:#16215B;--flutter-blue:#0285FF;--sky-blue:#CCE5FF;--dark-navy:#0B112E;--flutter-red:#D5225D;--flutter-yellow:#F8CD4B;--white:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:var(--dark-navy);font-family:Arial,Helvetica,sans-serif;color:var(--white);-webkit-user-select:none;user-select:none}
+#app{width:100vw;height:100vh;position:relative;overflow:hidden}
+.idle-screen{position:absolute;inset:0;width:100%;height:100%;background-position:center;background-repeat:no-repeat;background-size:cover;overflow:hidden}
+.idle-screen::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,17,46,.48) 0%,rgba(11,17,46,.24) 55%,rgba(11,17,46,.32) 100%);pointer-events:none;z-index:1}
+.idle-content{position:relative;width:100%;height:100%;z-index:2}
+.date-block{position:absolute;top:40px;right:55px;text-align:right;z-index:20}
+.idle-clock{color:var(--white);font-size:68px;font-weight:400;line-height:1;margin-bottom:16px}
+.date-single-line{color:var(--white);font-size:32px;font-weight:400;white-space:nowrap}
+.no-events-wrapper{position:absolute;inset:0;display:flex;justify-content:center;align-items:center}
+.no-events{color:var(--white);font-size:var(--available-size);font-weight:var(--available-weight);text-align:center;transform:translate(var(--available-x),var(--available-y))}
+.no-events-line{width:var(--available-line-width);height:var(--available-line-height);margin:var(--available-line-gap) auto 0;background:var(--flutter-yellow);border-radius:20px}
+.schedule-wrapper{position:absolute;left:55px;right:55px;top:var(--list-top);bottom:45px;transform:translateX(var(--list-x))}
+.schedule{width:100%;display:flex;flex-direction:column;gap:var(--row-gap)}
+.schedule-row{width:100%;display:grid;grid-template-columns:var(--time-column-width) minmax(0,1fr);align-items:center;min-height:92px;padding:18px 28px;background:rgba(11,17,46,.60);border-left:7px solid var(--flutter-blue);border-radius:0 14px 14px 0}
+.schedule-time{color:var(--flutter-yellow);font-size:var(--time-size);font-weight:var(--time-weight);line-height:1.05;white-space:nowrap;transform:translate(var(--time-x),var(--time-y))}
+.schedule-title{color:var(--white);font-size:var(--title-size);font-weight:var(--title-weight);line-height:1.10;padding-left:60px;white-space:normal;overflow-wrap:break-word;transform:translate(var(--title-x),var(--title-y))}
+.event-screen{position:absolute;inset:0;width:100%;height:100%;display:grid;grid-template-columns:50% 50%;background:var(--dark-navy)}
+.event-left{position:relative;width:100%;height:100%;overflow:hidden;background:var(--dark-navy)}
+.event-logo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;max-width:none;max-height:none;transform:translate(var(--left-image-x),var(--left-image-y)) scale(var(--left-image-scale));transform-origin:center}
+.event-left::after{content:"";position:absolute;top:0;right:-18px;width:36px;height:100%;background:linear-gradient(90deg,rgba(11,17,46,0),rgba(11,17,46,.55),rgba(11,17,46,0));filter:blur(8px);pointer-events:none;z-index:5}
+.event-logo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:60px;text-align:center;color:var(--sky-blue);font-size:62px;font-weight:700}
+.event-right{position:relative;width:100%;height:100%;overflow:hidden;background-position:center;background-repeat:no-repeat;background-size:cover;display:grid;grid-template-rows:56% 44%}
+.event-right::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,17,46,.40),rgba(11,17,46,.18) 45%,rgba(11,17,46,.45));pointer-events:none;z-index:1}
+.event-top{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-start;padding:65px 55px 30px}
+.event-title{color:var(--white);font-size:var(--active-title-size);font-weight:var(--active-title-weight);line-height:.98;letter-spacing:-.035em;overflow-wrap:break-word;transform:translate(var(--active-title-x),var(--active-title-y))}
+.event-time{color:var(--flutter-yellow);font-size:var(--active-time-size);font-weight:var(--active-time-weight);margin-top:28px;transform:translate(var(--active-time-x),var(--active-time-y))}
+.event-bottom{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;padding:35px 50px 55px}
+.progress-box{width:var(--progress-box-width);height:var(--progress-box-height);min-height:150px;display:flex;align-items:center;justify-content:center;border:5px solid rgba(213,34,93,.96);border-radius:28px;background:linear-gradient(135deg,rgba(95,8,36,.88),rgba(38,5,20,.95));overflow:hidden;transform:translate(var(--progress-box-x),var(--progress-box-y))}
+.progress-text{color:var(--white);font-size:var(--progress-text-size);font-weight:var(--progress-text-weight);line-height:1;text-align:center;white-space:nowrap;max-width:92%;transform:translate(var(--progress-text-x),var(--progress-text-y))}
+.system-message{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--dark-navy);text-align:center}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const SUPABASE_URL="https://wdcrihymqrbiljncxvbs.supabase.co";
+const SUPABASE_KEY="sb_publishable_WRI3MJLwDSP4wJscWdBmhA_t50js1al";
+const TIME_ZONE="Europe/Bucharest";
+const IDLE_BACKGROUND_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/idle/idle-background";
+const IDLE_LAYOUT_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/settings/idle-layout.json";
+const AVAILABLE_LAYOUT_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/settings/available-layout.json";
+const ACTIVE_LAYOUT_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/settings/active-layout.json";
+
+const DEFAULT_IDLE_LAYOUT={listTop:335,listX:0,rowGap:22,timeColumnWidth:250,timeFontSize:34,timeBold:false,timeX:0,timeY:0,titleFontSize:38,titleBold:false,titleX:0,titleY:0};
+const DEFAULT_AVAILABLE_LAYOUT={fontSize:60,bold:false,x:0,y:0,lineWidth:145,lineHeight:7,lineGap:28};
+const DEFAULT_ACTIVE_LAYOUT={titleFontSize:82,titleBold:true,titleX:0,titleY:0,timeFontSize:46,timeBold:true,timeX:0,timeY:0,progressTextFontSize:64,progressTextBold:true,progressTextX:0,progressTextY:0,progressBoxWidth:100,progressBoxHeight:78,progressBoxX:0,progressBoxY:0,leftImageScale:100,leftImageX:0,leftImageY:0};
+
+let idleLayout={...DEFAULT_IDLE_LAYOUT};
+let availableLayout={...DEFAULT_AVAILABLE_LAYOUT};
+let activeLayout={...DEFAULT_ACTIVE_LAYOUT};
+let todayEvents=[];
+let lastLoadedDate=null;
+
+function getBucharestParts(){
+  const formatter=new Intl.DateTimeFormat("en-GB",{timeZone:TIME_ZONE,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
+  const parts=formatter.formatToParts(new Date()),values={};
+  for(const part of parts){if(part.type!=="literal")values[part.type]=part.value}
+  return values
+}
+function getTodayDateString(){const p=getBucharestParts();return p.year+"-"+p.month+"-"+p.day}
+function getCurrentMinutes(){const p=getBucharestParts();return Number(p.hour)*60+Number(p.minute)}
+function getDisplayDate(){
+  const now=new Date();
+  const time=new Intl.DateTimeFormat("en-GB",{timeZone:TIME_ZONE,hour:"2-digit",minute:"2-digit",hour12:false}).format(now);
+  const fullDate=new Intl.DateTimeFormat("en-US",{timeZone:TIME_ZONE,weekday:"long",month:"long",day:"numeric"}).format(now);
+  return{time,fullDate}
+}
+function timeToMinutes(s){if(!s)return 0;const p=s.split(":").map(Number);return(p[0]||0)*60+(p[1]||0)}
+function formatTime(s){return s?s.substring(0,5):""}
+function escapeHtml(v){if(v==null)return"";return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+
+async function loadJson(url,defaults){
+  try{
+    const r=await fetch(url+"?t="+Date.now(),{cache:"no-store"});
+    if(!r.ok)return{...defaults};
+    return{...defaults,...await r.json()}
+  }catch(_){return{...defaults}}
+}
+async function loadAllLayoutSettings(){
+  const r=await Promise.all([
+    loadJson(IDLE_LAYOUT_URL,DEFAULT_IDLE_LAYOUT),
+    loadJson(AVAILABLE_LAYOUT_URL,DEFAULT_AVAILABLE_LAYOUT),
+    loadJson(ACTIVE_LAYOUT_URL,DEFAULT_ACTIVE_LAYOUT)
+  ]);
+  idleLayout=r[0];availableLayout=r[1];activeLayout=r[2];render()
+}
+async function loadEvents(){
+  const today=getTodayDateString();
+  try{
+    const url=SUPABASE_URL+"/rest/v1/events?select=*&event_date=eq."+encodeURIComponent(today)+"&order=start_time.asc";
+    const r=await fetch(url,{method:"GET",headers:{"apikey":SUPABASE_KEY,"Accept":"application/json"},cache:"no-store"});
+    if(!r.ok)throw new Error("Supabase returned "+r.status);
+    todayEvents=await r.json();lastLoadedDate=today;render()
+  }catch(e){renderError("Unable to load events")}
+}
+function getCurrentEvent(){
+  const now=getCurrentMinutes();
+  return todayEvents.find(e=>now>=timeToMinutes(e.start_time)&&now<timeToMinutes(e.end_time))
+}
+function getRemainingEvents(){
+  const now=getCurrentMinutes();
+  return todayEvents.filter(e=>timeToMinutes(e.end_time)>now)
+}
+function getDateBlockHtml(){
+  const d=getDisplayDate();
+  return `<div class="date-block"><div class="idle-clock">${escapeHtml(d.time)}</div><div class="date-single-line">${escapeHtml(d.fullDate)}</div></div>`
+}
+function getIdleVariables(){
+  return `
+  --list-top:${idleLayout.listTop}px;
+  --list-x:${idleLayout.listX}px;
+  --row-gap:${idleLayout.rowGap}px;
+  --time-column-width:${idleLayout.timeColumnWidth}px;
+  --time-size:${idleLayout.timeFontSize}px;
+  --time-weight:${idleLayout.timeBold?700:400};
+  --time-x:${idleLayout.timeX}px;
+  --time-y:${idleLayout.timeY}px;
+  --title-size:${idleLayout.titleFontSize}px;
+  --title-weight:${idleLayout.titleBold?700:400};
+  --title-x:${idleLayout.titleX}px;
+  --title-y:${idleLayout.titleY}px;
+  --available-size:${availableLayout.fontSize}px;
+  --available-weight:${availableLayout.bold?700:400};
+  --available-x:${availableLayout.x}px;
+  --available-y:${availableLayout.y}px;
+  --available-line-width:${availableLayout.lineWidth}px;
+  --available-line-height:${availableLayout.lineHeight}px;
+  --available-line-gap:${availableLayout.lineGap}px;`
+}
+function getActiveVariables(){
+  return `
+  --active-title-size:${activeLayout.titleFontSize}px;
+  --active-title-weight:${activeLayout.titleBold?700:400};
+  --active-title-x:${activeLayout.titleX}px;
+  --active-title-y:${activeLayout.titleY}px;
+  --active-time-size:${activeLayout.timeFontSize}px;
+  --active-time-weight:${activeLayout.timeBold?700:400};
+  --active-time-x:${activeLayout.timeX}px;
+  --active-time-y:${activeLayout.timeY}px;
+  --progress-text-size:${activeLayout.progressTextFontSize}px;
+  --progress-text-weight:${activeLayout.progressTextBold?700:400};
+  --progress-text-x:${activeLayout.progressTextX}px;
+  --progress-text-y:${activeLayout.progressTextY}px;
+  --progress-box-width:${activeLayout.progressBoxWidth}%;
+  --progress-box-height:${activeLayout.progressBoxHeight}%;
+  --progress-box-x:${activeLayout.progressBoxX}px;
+  --progress-box-y:${activeLayout.progressBoxY}px;
+  --left-image-scale:${activeLayout.leftImageScale/100};
+  --left-image-x:${activeLayout.leftImageX}px;
+  --left-image-y:${activeLayout.leftImageY}px;`
+}
+function renderIdle(){
+  const app=document.getElementById("app");
+  const background=IDLE_BACKGROUND_URL+"?v="+Math.floor(Date.now()/60000);
+  const remaining=getRemainingEvents(),vars=getIdleVariables();
+
+  if(!remaining.length){
+    app.innerHTML=`<section class="idle-screen" style="background-image:url('${background}');${vars}">
+      <div class="idle-content">${getDateBlockHtml()}
+        <div class="no-events-wrapper"><div class="no-events">Available all day<div class="no-events-line"></div></div></div>
+      </div></section>`;
+    return
+  }
+
+  const rows=remaining.map(e=>`<div class="schedule-row">
+    <div class="schedule-time">${escapeHtml(formatTime(e.start_time))} – ${escapeHtml(formatTime(e.end_time))}</div>
+    <div class="schedule-title">${escapeHtml(e.title)}</div>
+  </div>`).join("");
+
+  app.innerHTML=`<section class="idle-screen" style="background-image:url('${background}');${vars}">
+    <div class="idle-content">${getDateBlockHtml()}
+      <div class="schedule-wrapper"><div class="schedule">${rows}</div></div>
+    </div></section>`
+}
+function renderActiveEvent(event){
+  const app=document.getElementById("app");
+  const logo=event.logo_url||"",background=event.background_url||"";
+  const logoHtml=logo?`<img class="event-logo" src="${escapeHtml(logo)}" alt="">`:`<div class="event-logo-placeholder">${escapeHtml(event.title)}</div>`;
+  const rightStyle=background?`background-image:url('${escapeHtml(background)}');`:`background:linear-gradient(145deg,#16215B,#0285FF);`;
+
+  app.innerHTML=`<section class="event-screen" style="${getActiveVariables()}">
+    <div class="event-left">${logoHtml}</div>
+    <div class="event-right" style="${rightStyle}">
+      <div class="event-top">
+        <div class="event-title">${escapeHtml(event.title)}</div>
+        <div class="event-time">${escapeHtml(formatTime(event.start_time))} – ${escapeHtml(formatTime(event.end_time))}</div>
+      </div>
+      <div class="event-bottom"><div class="progress-box"><div class="progress-text">IN PROGRESS</div></div></div>
+    </div>
+  </section>`
+}
+function renderError(message){
+  document.getElementById("app").innerHTML=`<div class="system-message"><h1>Event Display</h1><p>${escapeHtml(message)}</p></div>`
+}
+function render(){
+  const today=getTodayDateString();
+  if(lastLoadedDate&&today!==lastLoadedDate){loadEvents();return}
+  const active=getCurrentEvent();
+  active?renderActiveEvent(active):renderIdle()
+}
+async function start(){
+  await loadAllLayoutSettings();
+  await loadEvents();
+  setInterval(render,1000);
+  setInterval(loadEvents,15000);
+  setInterval(loadAllLayoutSettings,15000)
+}
+start();
+</script>
+</body>
+</html>
