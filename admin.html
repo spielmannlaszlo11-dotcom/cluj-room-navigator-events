@@ -14,231 +14,503 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
   <style>
 
     * {
       box-sizing: border-box;
     }
 
+
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
       background: #f4f6f8;
+
       color: #16215B;
     }
 
+
     .container {
-      width: min(1050px, 94%);
+      width: min(1150px, 94%);
+
       margin: 40px auto;
     }
 
+
     .header {
       display: flex;
+
       align-items: center;
       justify-content: space-between;
+
+      gap: 20px;
+
       margin-bottom: 30px;
     }
 
+
     .header h1 {
       margin: 0;
+
       font-size: 32px;
     }
 
+
     .header p {
       margin: 5px 0 0;
+
       color: #64748b;
     }
+
 
     .card {
       background: white;
+
       border-radius: 16px;
+
       padding: 28px;
+
       margin-bottom: 24px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+
+      box-shadow:
+        0 4px 18px
+        rgba(0,0,0,0.05);
     }
+
 
     h2 {
       margin-top: 0;
+
       margin-bottom: 10px;
     }
 
+
+    h3 {
+      margin:
+        0
+        0
+        18px;
+
+      font-size: 18px;
+    }
+
+
     .subtitle {
       color: #64748b;
+
       margin-top: 0;
+
       margin-bottom: 24px;
+
+      line-height: 1.45;
     }
+
 
     .info-box {
       background: #f7f9fc;
-      border: 1px solid #dbe3ed;
+
+      border:
+        1px solid
+        #dbe3ed;
+
       border-radius: 10px;
+
       padding: 15px;
+
       margin-bottom: 20px;
+
       color: #475569;
+
       font-size: 14px;
+
       line-height: 1.5;
     }
 
+
     label {
       display: block;
+
       font-weight: 700;
+
       margin-bottom: 8px;
+
       font-size: 14px;
     }
 
-    input {
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"],
+    input[type="file"] {
+
       width: 100%;
+
       padding: 13px;
-      border: 1px solid #cbd5e1;
+
+      border:
+        1px solid
+        #cbd5e1;
+
       border-radius: 8px;
+
       font-size: 15px;
+
       background: white;
     }
 
+
     input:focus {
       outline: none;
+
       border-color: #0285FF;
-      box-shadow: 0 0 0 3px rgba(2,133,255,0.12);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(2,133,255,0.12);
     }
+
 
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+
+      grid-template-columns:
+        1fr
+        1fr;
+
       gap: 20px;
     }
+
 
     .field {
       margin-bottom: 18px;
     }
 
+
     button {
       border: none;
+
       border-radius: 8px;
-      padding: 12px 18px;
+
+      padding:
+        12px
+        18px;
+
       font-size: 14px;
+
       font-weight: 700;
+
       cursor: pointer;
     }
 
+
     .primary {
       background: #0285FF;
+
       color: white;
     }
+
 
     .primary:hover {
       background: #0075e6;
     }
 
+
     .secondary {
       background: #e8eef5;
+
       color: #16215B;
     }
 
+
     .danger {
       background: #fee2e2;
+
       color: #b91c1c;
     }
 
+
     .button-row {
       display: flex;
+
       flex-wrap: wrap;
+
       gap: 10px;
+
       margin-top: 16px;
     }
 
-    .preview-img {
-      display: block;
-      max-width: 100%;
-      max-height: 260px;
-      object-fit: contain;
-      border-radius: 10px;
-      background: #eef2f7;
-      margin-top: 12px;
-    }
-
-    .idle-preview {
-      width: 420px;
-      max-width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
-      border-radius: 12px;
-      background: #0B112E;
-      margin-top: 16px;
-    }
 
     .message {
       margin-top: 15px;
+
       min-height: 20px;
+
       font-weight: 600;
     }
+
 
     .success {
       color: #138a42;
     }
 
+
     .error {
       color: #c62828;
     }
 
-    .event-card {
-      border: 1px solid #e2e8f0;
+
+
+    /* =========================================================
+       IMAGE PREVIEWS
+       ========================================================= */
+
+    .preview-img {
+      display: block;
+
+      max-width: 100%;
+
+      max-height: 260px;
+
+      object-fit: contain;
+
+      border-radius: 10px;
+
+      background: #eef2f7;
+
+      margin-top: 12px;
+    }
+
+
+    .idle-preview {
+      width: 420px;
+
+      max-width: 100%;
+
+      aspect-ratio: 16 / 10;
+
+      object-fit: cover;
+
       border-radius: 12px;
-      padding: 18px;
-      margin-top: 15px;
+
+      background: #0B112E;
+
+      margin-top: 16px;
+    }
+
+
+
+    /* =========================================================
+       DISPLAY CONTROLS
+       ========================================================= */
+
+    .control-section {
+      border:
+        1px solid
+        #e2e8f0;
+
+      border-radius: 14px;
+
+      padding: 22px;
+
+      margin-bottom: 18px;
+
       background: #fbfcfe;
     }
 
-    .event-header {
+
+    .control-section:last-child {
+      margin-bottom: 0;
+    }
+
+
+    .control-grid {
+      display: grid;
+
+      grid-template-columns:
+        150px
+        1fr
+        1fr
+        1fr;
+
+      gap: 16px;
+
+      align-items: end;
+    }
+
+
+    .checkbox-field {
+      height: 46px;
+
       display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: flex-start;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        0
+        14px;
+
+      border:
+        1px solid
+        #cbd5e1;
+
+      border-radius: 8px;
+
+      background: white;
     }
 
-    .event-title {
-      font-size: 20px;
+
+    .checkbox-field input {
+      width: 20px;
+      height: 20px;
+
+      margin: 0;
+    }
+
+
+    .checkbox-field span {
       font-weight: 700;
-      margin-bottom: 7px;
-    }
 
-    .event-meta {
-      color: #64748b;
       font-size: 14px;
     }
 
+
+    .control-hint {
+      margin-top: 12px;
+
+      color: #64748b;
+
+      font-size: 13px;
+
+      line-height: 1.4;
+    }
+
+
+    .direction-hint {
+      display: inline-block;
+
+      margin-top: 6px;
+
+      font-size: 12px;
+
+      color: #64748b;
+    }
+
+
+
+    /* =========================================================
+       EVENT LIST
+       ========================================================= */
+
+    .event-card {
+      border:
+        1px solid
+        #e2e8f0;
+
+      border-radius: 12px;
+
+      padding: 18px;
+
+      margin-top: 15px;
+
+      background: #fbfcfe;
+    }
+
+
+    .event-header {
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 20px;
+
+      align-items: flex-start;
+    }
+
+
+    .event-title {
+      font-size: 20px;
+
+      font-weight: 700;
+
+      margin-bottom: 7px;
+    }
+
+
+    .event-meta {
+      color: #64748b;
+
+      font-size: 14px;
+    }
+
+
     .event-actions {
       display: flex;
+
       gap: 8px;
+
       flex-shrink: 0;
     }
+
+
+
+    /* =========================================================
+       LOGIN
+       ========================================================= */
 
     #adminSection {
       display: none;
     }
 
+
     #loginSection {
       max-width: 500px;
+
       margin: 100px auto;
     }
+
 
     .login-title {
       margin-bottom: 5px;
     }
 
+
     .login-subtitle {
       color: #64748b;
+
       margin-bottom: 25px;
     }
 
-    @media (max-width: 750px) {
+
+
+    @media (max-width: 850px) {
 
       .grid {
         grid-template-columns: 1fr;
       }
 
+
+      .control-grid {
+        grid-template-columns:
+          1fr
+          1fr;
+      }
+
+
       .event-header {
         flex-direction: column;
       }
+
 
       .header {
         align-items: flex-start;
@@ -246,9 +518,19 @@
 
     }
 
+
+    @media (max-width: 520px) {
+
+      .control-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
   </style>
 
 </head>
+
 
 
 <body>
@@ -270,9 +552,12 @@
       Sign in to manage Cluj event signage.
     </p>
 
+
     <div class="field">
 
-      <label>Email</label>
+      <label>
+        Email
+      </label>
 
       <input
         id="loginEmail"
@@ -282,9 +567,12 @@
 
     </div>
 
+
     <div class="field">
 
-      <label>Password</label>
+      <label>
+        Password
+      </label>
 
       <input
         id="loginPassword"
@@ -294,12 +582,14 @@
 
     </div>
 
+
     <button
       class="primary"
       onclick="login()"
     >
       Sign in
     </button>
+
 
     <div
       id="loginMessage"
@@ -351,6 +641,607 @@
 
 
   <!-- =======================================================
+       DISPLAY CONTROLS
+       ======================================================= -->
+
+  <div class="card">
+
+    <h2>
+      Display Controls
+    </h2>
+
+    <p class="subtitle">
+      Adjust text size, position and bold styling without editing index.html.
+      Changes are picked up automatically by the Navigator.
+    </p>
+
+
+    <div class="info-box">
+
+      <strong>Move X:</strong>
+      negative = move left,
+      positive = move right.
+
+      <br>
+
+      <strong>Move Y:</strong>
+      negative = move up,
+      positive = move down.
+
+      <br>
+
+      All position values are measured in pixels.
+
+    </div>
+
+
+
+    <!-- EVENT TITLE -->
+
+    <div class="control-section">
+
+      <h3>
+        Event Title
+      </h3>
+
+      <div class="control-grid">
+
+        <div>
+
+          <label>
+            Bold
+          </label>
+
+          <div class="checkbox-field">
+
+            <input
+              id="eventTitleBold"
+              type="checkbox"
+            >
+
+            <span>
+              Bold
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Font size
+          </label>
+
+          <input
+            id="eventTitleSize"
+            type="number"
+            min="20"
+            max="180"
+            step="1"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move X
+          </label>
+
+          <input
+            id="eventTitleX"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+          <span class="direction-hint">
+            − left / + right
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move Y
+          </label>
+
+          <input
+            id="eventTitleY"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+          <span class="direction-hint">
+            − up / + down
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- EVENT TIME -->
+
+    <div class="control-section">
+
+      <h3>
+        Event Time
+      </h3>
+
+      <div class="control-grid">
+
+        <div>
+
+          <label>
+            Bold
+          </label>
+
+          <div class="checkbox-field">
+
+            <input
+              id="eventTimeBold"
+              type="checkbox"
+            >
+
+            <span>
+              Bold
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Font size
+          </label>
+
+          <input
+            id="eventTimeSize"
+            type="number"
+            min="16"
+            max="120"
+            step="1"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move X
+          </label>
+
+          <input
+            id="eventTimeX"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move Y
+          </label>
+
+          <input
+            id="eventTimeY"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- IN PROGRESS -->
+
+    <div class="control-section">
+
+      <h3>
+        IN PROGRESS
+      </h3>
+
+      <div class="control-grid">
+
+        <div>
+
+          <label>
+            Bold
+          </label>
+
+          <div class="checkbox-field">
+
+            <input
+              id="progressTextBold"
+              type="checkbox"
+            >
+
+            <span>
+              Bold
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Font size
+          </label>
+
+          <input
+            id="progressTextSize"
+            type="number"
+            min="20"
+            max="160"
+            step="1"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move X
+          </label>
+
+          <input
+            id="progressTextX"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move Y
+          </label>
+
+          <input
+            id="progressTextY"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- IDLE CLOCK -->
+
+    <div class="control-section">
+
+      <h3>
+        Idle Clock
+      </h3>
+
+      <div class="control-grid">
+
+        <div>
+
+          <label>
+            Bold
+          </label>
+
+          <div class="checkbox-field">
+
+            <input
+              id="idleClockBold"
+              type="checkbox"
+            >
+
+            <span>
+              Bold
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Font size
+          </label>
+
+          <input
+            id="idleClockSize"
+            type="number"
+            min="20"
+            max="180"
+            step="1"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move X
+          </label>
+
+          <input
+            id="idleClockX"
+            type="number"
+            min="-800"
+            max="800"
+            step="5"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move Y
+          </label>
+
+          <input
+            id="idleClockY"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- IDLE DATE -->
+
+    <div class="control-section">
+
+      <h3>
+        Idle Date
+      </h3>
+
+      <div class="control-grid">
+
+        <div>
+
+          <label>
+            Bold
+          </label>
+
+          <div class="checkbox-field">
+
+            <input
+              id="idleDateBold"
+              type="checkbox"
+            >
+
+            <span>
+              Bold
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Font size
+          </label>
+
+          <input
+            id="idleDateSize"
+            type="number"
+            min="16"
+            max="120"
+            step="1"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move X
+          </label>
+
+          <input
+            id="idleDateX"
+            type="number"
+            min="-800"
+            max="800"
+            step="5"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move Y
+          </label>
+
+          <input
+            id="idleDateY"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- AVAILABLE ALL DAY -->
+
+    <div class="control-section">
+
+      <h3>
+        Available all day
+      </h3>
+
+      <div class="control-grid">
+
+        <div>
+
+          <label>
+            Bold
+          </label>
+
+          <div class="checkbox-field">
+
+            <input
+              id="idleAvailableBold"
+              type="checkbox"
+            >
+
+            <span>
+              Bold
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Font size
+          </label>
+
+          <input
+            id="idleAvailableSize"
+            type="number"
+            min="20"
+            max="160"
+            step="1"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move X
+          </label>
+
+          <input
+            id="idleAvailableX"
+            type="number"
+            min="-800"
+            max="800"
+            step="5"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Move Y
+          </label>
+
+          <input
+            id="idleAvailableY"
+            type="number"
+            min="-500"
+            max="500"
+            step="5"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="button-row">
+
+      <button
+        class="primary"
+        onclick="saveDisplaySettings()"
+      >
+        Save Display Settings
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="resetDisplaySettings()"
+      >
+        Reset to Defaults
+      </button>
+
+    </div>
+
+
+    <div
+      id="displaySettingsMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+
+
+  <!-- =======================================================
        IDLE BACKGROUND
        ======================================================= -->
 
@@ -372,7 +1263,7 @@
 
       <br>
 
-      Uploading a new image will automatically replace the previous idle background.
+      Uploading a new image replaces the previous idle background.
 
     </div>
 
@@ -542,12 +1433,10 @@
 
       </div>
 
-
     </div>
 
 
     <div class="button-row">
-
 
       <button
         id="saveEventButton"
@@ -566,7 +1455,6 @@
       >
         Cancel Edit
       </button>
-
 
     </div>
 
@@ -621,36 +1509,85 @@ const sb =
   );
 
 
-
-/* =========================================================
-   SETTINGS
-   ========================================================= */
-
 const TIME_ZONE =
   "Europe/Bucharest";
 
-
-/*
-   IMPORTANT
-
-   This is the EXACT SAME path
-   that index.html uses.
-*/
 
 const IDLE_BACKGROUND_PATH =
   "idle/idle-background";
 
 
+const DISPLAY_SETTINGS_PATH =
+  "settings/display-settings.json";
+
+
 
 /* =========================================================
-   EVENT EDIT STATE
+   DEFAULT DISPLAY SETTINGS
    ========================================================= */
 
-let editingEventId = null;
+const DEFAULT_DISPLAY_SETTINGS = {
 
-let existingLogoUrl = null;
+  eventTitle: {
+    size: 98,
+    x: 0,
+    y: 0,
+    bold: true
+  },
 
-let existingBackgroundUrl = null;
+  eventTime: {
+    size: 54,
+    x: 0,
+    y: 0,
+    bold: true
+  },
+
+  progressText: {
+    size: 64,
+    x: 0,
+    y: 0,
+    bold: true
+  },
+
+  idleClock: {
+    size: 82,
+    x: 0,
+    y: 0,
+    bold: false
+  },
+
+  idleDate: {
+    size: 38,
+    x: 0,
+    y: 0,
+    bold: false
+  },
+
+  idleAvailable: {
+    size: 72,
+    x: 0,
+    y: 0,
+    bold: false
+  }
+
+};
+
+
+
+/* =========================================================
+   EDIT STATE
+   ========================================================= */
+
+let editingEventId =
+  null;
+
+
+let existingLogoUrl =
+  null;
+
+
+let existingBackgroundUrl =
+  null;
 
 
 
@@ -662,14 +1599,18 @@ async function login() {
 
   const email =
     document
-      .getElementById("loginEmail")
+      .getElementById(
+        "loginEmail"
+      )
       .value
       .trim();
 
 
   const password =
     document
-      .getElementById("loginPassword")
+      .getElementById(
+        "loginPassword"
+      )
       .value;
 
 
@@ -682,20 +1623,19 @@ async function login() {
   message.textContent =
     "Signing in...";
 
+
   message.className =
     "message";
 
 
   const {
-    data,
     error
   } =
-    await sb.auth.signInWithPassword({
-
-      email,
-      password
-
-    });
+    await sb.auth
+      .signInWithPassword({
+        email,
+        password
+      });
 
 
   if (error) {
@@ -706,12 +1646,7 @@ async function login() {
     message.className =
       "message error";
 
-    return;
-
   }
-
-
-  showAdmin();
 
 }
 
@@ -724,8 +1659,6 @@ async function login() {
 async function logout() {
 
   await sb.auth.signOut();
-
-  showLogin();
 
 }
 
@@ -788,6 +1721,8 @@ function showAdmin() {
 
   showIdleBackground();
 
+  loadDisplaySettings();
+
   loadEvents();
 
 }
@@ -820,31 +1755,144 @@ function showLogin() {
 
 
 /* =========================================================
-   BUCHAREST TODAY
+   DISPLAY SETTINGS HELPERS
    ========================================================= */
 
-function getTodayDate() {
+function setControlValues(
+  prefix,
+  values
+) {
 
-  return new Intl.DateTimeFormat(
-    "en-CA",
-    {
+  document
+    .getElementById(
+      prefix + "Bold"
+    )
+    .checked =
+    Boolean(
+      values.bold
+    );
 
-      timeZone:
-        TIME_ZONE,
 
-      year:
-        "numeric",
+  document
+    .getElementById(
+      prefix + "Size"
+    )
+    .value =
+    Number(
+      values.size
+    );
 
-      month:
-        "2-digit",
 
-      day:
-        "2-digit"
+  document
+    .getElementById(
+      prefix + "X"
+    )
+    .value =
+    Number(
+      values.x
+    );
 
-    }
-  )
-  .format(
-    new Date()
+
+  document
+    .getElementById(
+      prefix + "Y"
+    )
+    .value =
+    Number(
+      values.y
+    );
+
+}
+
+
+
+function getControlValues(
+  prefix
+) {
+
+  return {
+
+    bold:
+      document
+        .getElementById(
+          prefix + "Bold"
+        )
+        .checked,
+
+    size:
+      Number(
+        document
+          .getElementById(
+            prefix + "Size"
+          )
+          .value
+      ),
+
+    x:
+      Number(
+        document
+          .getElementById(
+            prefix + "X"
+          )
+          .value
+      ),
+
+    y:
+      Number(
+        document
+          .getElementById(
+            prefix + "Y"
+          )
+          .value
+      )
+
+  };
+
+}
+
+
+
+/* =========================================================
+   APPLY SETTINGS TO FORM
+   ========================================================= */
+
+function populateDisplayControls(
+  settings
+) {
+
+  setControlValues(
+    "eventTitle",
+    settings.eventTitle
+  );
+
+
+  setControlValues(
+    "eventTime",
+    settings.eventTime
+  );
+
+
+  setControlValues(
+    "progressText",
+    settings.progressText
+  );
+
+
+  setControlValues(
+    "idleClock",
+    settings.idleClock
+  );
+
+
+  setControlValues(
+    "idleDate",
+    settings.idleDate
+  );
+
+
+  setControlValues(
+    "idleAvailable",
+    settings.idleAvailable
   );
 
 }
@@ -852,7 +1900,356 @@ function getTodayDate() {
 
 
 /* =========================================================
-   DEFAULT DATE
+   LOAD DISPLAY SETTINGS
+   ========================================================= */
+
+async function loadDisplaySettings() {
+
+  const message =
+    document.getElementById(
+      "displaySettingsMessage"
+    );
+
+
+  const {
+    data
+  } =
+    sb.storage
+      .from(
+        "event-assets"
+      )
+      .getPublicUrl(
+        DISPLAY_SETTINGS_PATH
+      );
+
+
+  try {
+
+    const response =
+      await fetch(
+        data.publicUrl +
+        "?t=" +
+        Date.now(),
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      populateDisplayControls(
+        DEFAULT_DISPLAY_SETTINGS
+      );
+
+      return;
+
+    }
+
+
+    const saved =
+      await response.json();
+
+
+    const merged = {
+
+      eventTitle:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.eventTitle,
+          saved.eventTitle || {}
+        ),
+
+      eventTime:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.eventTime,
+          saved.eventTime || {}
+        ),
+
+      progressText:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.progressText,
+          saved.progressText || {}
+        ),
+
+      idleClock:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleClock,
+          saved.idleClock || {}
+        ),
+
+      idleDate:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleDate,
+          saved.idleDate || {}
+        ),
+
+      idleAvailable:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleAvailable,
+          saved.idleAvailable || {}
+        )
+
+    };
+
+
+    populateDisplayControls(
+      merged
+    );
+
+  }
+
+  catch (error) {
+
+    console.log(
+      "No saved display settings yet."
+    );
+
+
+    populateDisplayControls(
+      DEFAULT_DISPLAY_SETTINGS
+    );
+
+  }
+
+}
+
+
+
+/* =========================================================
+   SAVE DISPLAY SETTINGS
+   ========================================================= */
+
+async function saveDisplaySettings() {
+
+  const message =
+    document.getElementById(
+      "displaySettingsMessage"
+    );
+
+
+  const settings = {
+
+    eventTitle:
+      getControlValues(
+        "eventTitle"
+      ),
+
+    eventTime:
+      getControlValues(
+        "eventTime"
+      ),
+
+    progressText:
+      getControlValues(
+        "progressText"
+      ),
+
+    idleClock:
+      getControlValues(
+        "idleClock"
+      ),
+
+    idleDate:
+      getControlValues(
+        "idleDate"
+      ),
+
+    idleAvailable:
+      getControlValues(
+        "idleAvailable"
+      )
+
+  };
+
+
+  try {
+
+    message.textContent =
+      "Saving display settings...";
+
+
+    message.className =
+      "message";
+
+
+    const json =
+      JSON.stringify(
+        settings,
+        null,
+        2
+      );
+
+
+    const blob =
+      new Blob(
+        [json],
+        {
+          type:
+            "application/json"
+        }
+      );
+
+
+    const {
+      error
+    } =
+      await sb.storage
+        .from(
+          "event-assets"
+        )
+        .upload(
+          DISPLAY_SETTINGS_PATH,
+          blob,
+          {
+            upsert:
+              true,
+
+            contentType:
+              "application/json",
+
+            cacheControl:
+              "10"
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    message.textContent =
+      "Display settings saved successfully.";
+
+
+    message.className =
+      "message success";
+
+  }
+
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    message.textContent =
+      "Error: " +
+      error.message;
+
+
+    message.className =
+      "message error";
+
+  }
+
+}
+
+
+
+/* =========================================================
+   RESET DISPLAY SETTINGS
+   ========================================================= */
+
+function resetDisplaySettings() {
+
+  const confirmed =
+    confirm(
+      "Reset all display controls to the default values?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  populateDisplayControls(
+    DEFAULT_DISPLAY_SETTINGS
+  );
+
+
+  document
+    .getElementById(
+      "displaySettingsMessage"
+    )
+    .textContent =
+    "Defaults loaded. Click Save Display Settings to apply them.";
+
+}
+
+
+
+/* =========================================================
+   BUCHAREST DATE
+   ========================================================= */
+
+function getTodayDate() {
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        timeZone:
+          TIME_ZONE,
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit"
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+
+  const values = {};
+
+
+  parts.forEach(
+    function(part) {
+
+      if (
+        part.type !==
+        "literal"
+      ) {
+
+        values[part.type] =
+          part.value;
+
+      }
+
+    }
+  );
+
+
+  return (
+    values.year +
+    "-" +
+    values.month +
+    "-" +
+    values.day
+  );
+
+}
+
+
+
+/* =========================================================
+   DEFAULT EVENT DATE
    ========================================================= */
 
 function setDefaultDate() {
@@ -875,7 +2272,7 @@ function setDefaultDate() {
 
 
 /* =========================================================
-   IDLE BACKGROUND PREVIEW
+   IDLE BACKGROUND
    ========================================================= */
 
 function showIdleBackground() {
@@ -884,24 +2281,19 @@ function showIdleBackground() {
     data
   } =
     sb.storage
-      .from("event-assets")
+      .from(
+        "event-assets"
+      )
       .getPublicUrl(
         IDLE_BACKGROUND_PATH
       );
 
 
-  const img =
-    document.getElementById(
+  document
+    .getElementById(
       "idleBackgroundPreview"
-    );
-
-
-  /*
-     Cache-busting query ensures
-     the newest image is displayed.
-  */
-
-  img.src =
+    )
+    .src =
     data.publicUrl +
     "?t=" +
     Date.now();
@@ -910,10 +2302,6 @@ function showIdleBackground() {
 
 
 
-/* =========================================================
-   SELECT IDLE BACKGROUND PREVIEW
-   ========================================================= */
-
 document
   .getElementById(
     "idleBackgroundFile"
@@ -921,7 +2309,6 @@ document
   .addEventListener(
     "change",
     function() {
-
 
       const file =
         this.files[0];
@@ -932,26 +2319,19 @@ document
       }
 
 
-      const img =
-        document.getElementById(
+      document
+        .getElementById(
           "idleBackgroundPreview"
-        );
-
-
-      img.src =
+        )
+        .src =
         URL.createObjectURL(
           file
         );
-
 
     }
   );
 
 
-
-/* =========================================================
-   SAVE IDLE BACKGROUND
-   ========================================================= */
 
 async function saveIdleBackground() {
 
@@ -986,27 +2366,13 @@ async function saveIdleBackground() {
 
   try {
 
-
     message.textContent =
       "Uploading idle background...";
+
 
     message.className =
       "message";
 
-
-    /*
-       IMPORTANT
-
-       No random filename anymore.
-
-       Every upload goes to:
-
-       event-assets/
-       └── idle/
-           └── idle-background
-
-       upsert:true means replace the old one.
-    */
 
     const {
       error
@@ -1019,7 +2385,6 @@ async function saveIdleBackground() {
           IDLE_BACKGROUND_PATH,
           file,
           {
-
             upsert:
               true,
 
@@ -1028,7 +2393,6 @@ async function saveIdleBackground() {
 
             cacheControl:
               "60"
-
           }
         );
 
@@ -1041,6 +2405,7 @@ async function saveIdleBackground() {
     message.textContent =
       "Idle background updated successfully.";
 
+
     message.className =
       "message success";
 
@@ -1051,16 +2416,9 @@ async function saveIdleBackground() {
 
     showIdleBackground();
 
-
   }
 
   catch (error) {
-
-
-    console.error(
-      error
-    );
-
 
     message.textContent =
       "Error: " +
@@ -1075,10 +2433,6 @@ async function saveIdleBackground() {
 }
 
 
-
-/* =========================================================
-   DELETE IDLE BACKGROUND
-   ========================================================= */
 
 async function deleteIdleBackground() {
 
@@ -1093,52 +2447,25 @@ async function deleteIdleBackground() {
   }
 
 
+  const {
+    error
+  } =
+    await sb.storage
+      .from(
+        "event-assets"
+      )
+      .remove([
+        IDLE_BACKGROUND_PATH
+      ]);
+
+
   const message =
     document.getElementById(
       "idleMessage"
     );
 
 
-  try {
-
-
-    const {
-      error
-    } =
-      await sb.storage
-        .from(
-          "event-assets"
-        )
-        .remove([
-          IDLE_BACKGROUND_PATH
-        ]);
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    document
-      .getElementById(
-        "idleBackgroundPreview"
-      )
-      .removeAttribute(
-        "src"
-      );
-
-
-    message.textContent =
-      "Idle background removed.";
-
-    message.className =
-      "message success";
-
-
-  }
-
-  catch (error) {
-
+  if (error) {
 
     message.textContent =
       "Error: " +
@@ -1148,14 +2475,33 @@ async function deleteIdleBackground() {
     message.className =
       "message error";
 
+    return;
+
   }
+
+
+  document
+    .getElementById(
+      "idleBackgroundPreview"
+    )
+    .removeAttribute(
+      "src"
+    );
+
+
+  message.textContent =
+    "Idle background removed.";
+
+
+  message.className =
+    "message success";
 
 }
 
 
 
 /* =========================================================
-   IMAGE PREVIEW — EVENT LOGO
+   FILE PREVIEWS
    ========================================================= */
 
 document
@@ -1165,7 +2511,6 @@ document
   .addEventListener(
     "change",
     function() {
-
 
       const file =
         this.files[0];
@@ -1191,15 +2536,10 @@ document
       preview.style.display =
         "block";
 
-
     }
   );
 
 
-
-/* =========================================================
-   IMAGE PREVIEW — EVENT BACKGROUND
-   ========================================================= */
 
 document
   .getElementById(
@@ -1208,7 +2548,6 @@ document
   .addEventListener(
     "change",
     function() {
-
 
       const file =
         this.files[0];
@@ -1234,28 +2573,27 @@ document
       preview.style.display =
         "block";
 
-
     }
   );
 
 
 
 /* =========================================================
-   FILE EXTENSION
+   FILE UPLOAD
    ========================================================= */
 
 function getExtension(file) {
 
-  const name =
-    file.name || "";
-
-
   const pieces =
-    name.split(".");
+    String(
+      file.name || ""
+    )
+    .split(".");
 
 
   if (
-    pieces.length > 1
+    pieces.length >
+    1
   ) {
 
     return pieces
@@ -1291,20 +2629,10 @@ function getExtension(file) {
 
 
 
-/* =========================================================
-   UPLOAD EVENT FILE
-   ========================================================= */
-
 async function uploadEventFile(
   file,
   folder
 ) {
-
-  const extension =
-    getExtension(
-      file
-    );
-
 
   const path =
 
@@ -1320,7 +2648,9 @@ async function uploadEventFile(
 
     "." +
 
-    extension;
+    getExtension(
+      file
+    );
 
 
   const {
@@ -1334,7 +2664,6 @@ async function uploadEventFile(
         path,
         file,
         {
-
           cacheControl:
             "3600",
 
@@ -1343,7 +2672,6 @@ async function uploadEventFile(
 
           contentType:
             file.type
-
         }
       );
 
@@ -1372,7 +2700,7 @@ async function uploadEventFile(
 
 
 /* =========================================================
-   SAVE / UPDATE EVENT
+   SAVE EVENT
    ========================================================= */
 
 async function saveEvent() {
@@ -1442,6 +2770,7 @@ async function saveEvent() {
     message.textContent =
       "Please complete the date, title, start time and end time.";
 
+
     message.className =
       "message error";
 
@@ -1451,11 +2780,13 @@ async function saveEvent() {
 
 
   if (
-    endTime <= startTime
+    endTime <=
+    startTime
   ) {
 
     message.textContent =
       "End time must be later than start time.";
+
 
     message.className =
       "message error";
@@ -1467,19 +2798,6 @@ async function saveEvent() {
 
   try {
 
-
-    message.textContent =
-      editingEventId
-        ?
-        "Updating event..."
-        :
-        "Saving event...";
-
-
-    message.className =
-      "message";
-
-
     let logoUrl =
       existingLogoUrl;
 
@@ -1488,12 +2806,7 @@ async function saveEvent() {
       existingBackgroundUrl;
 
 
-
     if (logoFile) {
-
-      message.textContent =
-        "Uploading logo...";
-
 
       logoUrl =
         await uploadEventFile(
@@ -1504,12 +2817,7 @@ async function saveEvent() {
     }
 
 
-
     if (backgroundFile) {
-
-      message.textContent =
-        "Uploading event background...";
-
 
       backgroundUrl =
         await uploadEventFile(
@@ -1518,7 +2826,6 @@ async function saveEvent() {
         );
 
     }
-
 
 
     const eventData = {
@@ -1544,9 +2851,7 @@ async function saveEvent() {
     };
 
 
-
     if (editingEventId) {
-
 
       const {
         error
@@ -1572,11 +2877,9 @@ async function saveEvent() {
       message.textContent =
         "Event updated successfully.";
 
-
     }
 
     else {
-
 
       const {
         error
@@ -1609,16 +2912,9 @@ async function saveEvent() {
 
     loadEvents();
 
-
   }
 
   catch (error) {
-
-
-    console.error(
-      error
-    );
-
 
     message.textContent =
       "Error: " +
@@ -1650,10 +2946,6 @@ async function loadEvents() {
     "Loading events...";
 
 
-  const today =
-    getTodayDate();
-
-
   const {
     data,
     error
@@ -1667,7 +2959,7 @@ async function loadEvents() {
       )
       .gte(
         "event_date",
-        today
+        getTodayDate()
       )
       .order(
         "event_date",
@@ -1689,7 +2981,9 @@ async function loadEvents() {
 
     list.innerHTML =
       '<div class="error">' +
-      error.message +
+      escapeHtml(
+        error.message
+      ) +
       "</div>";
 
     return;
@@ -1699,7 +2993,8 @@ async function loadEvents() {
 
   if (
     !data ||
-    data.length === 0
+    data.length ===
+    0
   ) {
 
     list.innerHTML =
@@ -1715,8 +3010,7 @@ async function loadEvents() {
 
 
   data.forEach(
-    event => {
-
+    function(event) {
 
       const card =
         document.createElement(
@@ -1735,7 +3029,9 @@ async function loadEvents() {
           <div>
 
             <div class="event-title">
+
               ${escapeHtml(event.title)}
+
             </div>
 
             <div class="event-meta">
@@ -1763,7 +3059,6 @@ async function loadEvents() {
             >
               Edit
             </button>
-
 
             <button
               class="danger"
@@ -1897,14 +3192,15 @@ async function editEvent(id) {
   }
 
 
-
   const backgroundPreview =
     document.getElementById(
       "backgroundPreview"
     );
 
 
-  if (data.background_url) {
+  if (
+    data.background_url
+  ) {
 
     backgroundPreview.src =
       data.background_url;
@@ -1920,7 +3216,6 @@ async function editEvent(id) {
       "none";
 
   }
-
 
 
   document
@@ -1946,30 +3241,6 @@ async function editEvent(id) {
     .style.display =
     "inline-block";
 
-
-  document
-    .getElementById(
-      "eventMessage"
-    )
-    .textContent =
-    "";
-
-
-  window.scrollTo({
-
-    top:
-      document
-        .getElementById(
-          "formHeading"
-        )
-        .offsetTop -
-      40,
-
-    behavior:
-      "smooth"
-
-  });
-
 }
 
 
@@ -1980,14 +3251,14 @@ async function editEvent(id) {
 
 async function deleteEvent(id) {
 
-  const confirmed =
-    confirm(
+  if (
+    !confirm(
       "Delete this event?"
-    );
+    )
+  ) {
 
-
-  if (!confirmed) {
     return;
+
   }
 
 
@@ -2017,7 +3288,8 @@ async function deleteEvent(id) {
 
 
   if (
-    editingEventId === id
+    editingEventId ===
+    id
   ) {
 
     resetEventForm();
@@ -2032,7 +3304,7 @@ async function deleteEvent(id) {
 
 
 /* =========================================================
-   CANCEL EDIT
+   RESET EVENT FORM
    ========================================================= */
 
 function cancelEdit() {
@@ -2042,10 +3314,6 @@ function cancelEdit() {
 }
 
 
-
-/* =========================================================
-   RESET EVENT FORM
-   ========================================================= */
 
 function resetEventForm() {
 
@@ -2148,12 +3416,10 @@ function resetEventForm() {
 
 
 /* =========================================================
-   FORMAT TIME
+   HELPERS
    ========================================================= */
 
-function formatTime(
-  value
-) {
+function formatTime(value) {
 
   if (!value) {
     return "";
@@ -2169,13 +3435,7 @@ function formatTime(
 
 
 
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
-
-function escapeHtml(
-  value
-) {
+function escapeHtml(value) {
 
   if (
     value === null ||
@@ -2189,48 +3449,31 @@ function escapeHtml(
 
   return String(value)
 
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
+    .replace(/&/g, "&amp;")
 
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
+    .replace(/</g, "&lt;")
 
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
+    .replace(/>/g, "&gt;")
 
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
+    .replace(/"/g, "&quot;")
 
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+    .replace(/'/g, "&#039;");
 
 }
 
 
 
 /* =========================================================
-   AUTH CHANGES
+   AUTH STATE
    ========================================================= */
 
 sb.auth.onAuthStateChange(
-  (
+  function(
     event,
     session
-  ) => {
+  ) {
 
-    if (
-      session
-    ) {
+    if (session) {
 
       showAdmin();
 
@@ -2255,7 +3498,6 @@ checkSession();
 
 
 </script>
-
 
 </body>
 
