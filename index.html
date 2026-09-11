@@ -12,7 +12,6 @@
 
   <title>Room Navigator Events</title>
 
-
   <style>
 
     /* =========================================================
@@ -20,7 +19,6 @@
        ========================================================= */
 
     :root {
-
       --flutter-navy: #16215B;
       --flutter-blue: #0285FF;
       --sky-blue: #CCE5FF;
@@ -30,7 +28,6 @@
       --flutter-yellow: #F8CD4B;
 
       --white: #FFFFFF;
-
     }
 
 
@@ -47,7 +44,6 @@
 
     html,
     body {
-
       width: 100%;
       height: 100%;
 
@@ -64,21 +60,17 @@
 
       -webkit-user-select: none;
       user-select: none;
-
     }
 
 
     #app {
-
       position: relative;
 
       width: 100vw;
       height: 100vh;
 
       overflow: hidden;
-
     }
-
 
 
     /* =========================================================
@@ -86,7 +78,6 @@
        ========================================================= */
 
     .idle-screen {
-
       position: absolute;
       inset: 0;
 
@@ -98,12 +89,10 @@
       background-size: cover;
 
       overflow: hidden;
-
     }
 
 
     .idle-screen::before {
-
       content: "";
 
       position: absolute;
@@ -120,29 +109,25 @@
       pointer-events: none;
 
       z-index: 1;
-
     }
 
 
     .idle-content {
-
       position: relative;
 
       width: 100%;
       height: 100%;
 
       z-index: 2;
-
     }
-
 
 
     /* =========================================================
        DATE — TOP RIGHT
+       NO BOLD
        ========================================================= */
 
     .date-block {
-
       position: absolute;
 
       top: 70px;
@@ -151,45 +136,38 @@
       text-align: right;
 
       line-height: 1;
-
     }
 
 
     .date-day {
-
       color: var(--sky-blue);
 
       font-size: 44px;
 
-      font-weight: 500;
+      font-weight: 400;
 
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
 
       margin-bottom: 14px;
-
     }
 
 
     .date-date {
-
       color: var(--white);
 
       font-size: 64px;
 
-      font-weight: 700;
+      font-weight: 400;
 
-      letter-spacing: -0.025em;
-
+      letter-spacing: -0.02em;
     }
 
 
-
     /* =========================================================
-       NO EVENTS
+       AVAILABLE ALL DAY
        ========================================================= */
 
     .no-events-wrapper {
-
       position: absolute;
       inset: 0;
 
@@ -199,47 +177,41 @@
       justify-content: center;
 
       pointer-events: none;
-
     }
 
 
     .no-events {
-
       text-align: center;
 
       color: var(--white);
 
-      font-size: 88px;
+      font-size: 82px;
 
-      font-weight: 700;
+      font-weight: 400;
 
-      letter-spacing: -0.025em;
-
+      letter-spacing: -0.02em;
     }
 
 
     .no-events-line {
-
       width: 150px;
 
-      height: 9px;
+      height: 8px;
 
       margin: 28px auto 0;
 
       background: var(--flutter-yellow);
 
       border-radius: 20px;
-
     }
-
 
 
     /* =========================================================
        DAILY EVENT SCHEDULE
+       ALSO NO BOLD
        ========================================================= */
 
     .schedule-wrapper {
-
       position: absolute;
 
       left: 90px;
@@ -251,24 +223,20 @@
       display: flex;
 
       align-items: flex-start;
-
     }
 
 
     .schedule {
-
       width: 100%;
 
       display: flex;
       flex-direction: column;
 
       gap: 22px;
-
     }
 
 
     .schedule-row {
-
       width: 100%;
 
       display: grid;
@@ -300,34 +268,28 @@
 
       backdrop-filter:
         blur(12px);
-
     }
 
 
     .schedule-time {
-
-      color:
-        var(--flutter-yellow);
+      color: var(--flutter-yellow);
 
       font-size: 48px;
 
-      font-weight: 700;
+      font-weight: 400;
 
       line-height: 1.05;
 
       white-space: nowrap;
-
     }
 
 
     .schedule-title {
-
-      color:
-        var(--white);
+      color: var(--white);
 
       font-size: 52px;
 
-      font-weight: 600;
+      font-weight: 400;
 
       line-height: 1.10;
 
@@ -338,9 +300,7 @@
       overflow-wrap: break-word;
 
       word-break: normal;
-
     }
-
 
 
     /* =========================================================
@@ -348,7 +308,6 @@
        ========================================================= */
 
     .event-screen {
-
       position: absolute;
       inset: 0;
 
@@ -362,9 +321,7 @@
 
       background:
         var(--dark-navy);
-
     }
-
 
 
     /* =========================================================
@@ -372,7 +329,6 @@
        ========================================================= */
 
     .event-left {
-
       position: relative;
 
       width: 100%;
@@ -392,12 +348,10 @@
           rgba(22,33,91,0.38) 45%,
           rgba(11,17,46,1) 88%
         );
-
     }
 
 
     .event-left::after {
-
       content: "";
 
       position: absolute;
@@ -421,12 +375,10 @@
       pointer-events: none;
 
       z-index: 5;
-
     }
 
 
     .event-logo {
-
       width: 88%;
       height: 88%;
 
@@ -443,12 +395,10 @@
           0 28px 38px
           rgba(0,0,0,0.30)
         );
-
     }
 
 
     .event-logo-placeholder {
-
       width: 80%;
       height: 80%;
 
@@ -465,9 +415,7 @@
       font-size: 62px;
 
       font-weight: 700;
-
     }
-
 
 
     /* =========================================================
@@ -475,7 +423,6 @@
        ========================================================= */
 
     .event-right {
-
       position: relative;
 
       width: 100%;
@@ -491,12 +438,10 @@
 
       grid-template-rows:
         56% 44%;
-
     }
 
 
     .event-right::before {
-
       content: "";
 
       position: absolute;
@@ -513,17 +458,14 @@
       pointer-events: none;
 
       z-index: 1;
-
     }
 
 
-
     /* =========================================================
-       RIGHT TOP — EVENT TITLE + TIME
+       ACTIVE EVENT TITLE + TIME
        ========================================================= */
 
     .event-top {
-
       position: relative;
 
       z-index: 2;
@@ -532,32 +474,18 @@
 
       flex-direction: column;
 
-      /*
-         CHANGED:
-         Previously content was pushed to the bottom.
-         Now it starts near the top.
-      */
-
       justify-content: flex-start;
 
       padding:
         110px
         80px
         40px;
-
     }
 
 
     .event-title {
-
       color:
         var(--white);
-
-      /*
-         CHANGED:
-         Was 82px.
-         Now ~20% larger.
-      */
 
       font-size: 98px;
 
@@ -572,12 +500,10 @@
         break-word;
 
       max-width: 100%;
-
     }
 
 
     .event-time {
-
       color:
         var(--flutter-yellow);
 
@@ -586,17 +512,14 @@
       font-weight: 700;
 
       margin-top: 28px;
-
     }
 
 
-
     /* =========================================================
-       RIGHT BOTTOM — IN PROGRESS
+       IN PROGRESS
        ========================================================= */
 
     .event-bottom {
-
       position: relative;
 
       z-index: 2;
@@ -610,12 +533,10 @@
         45px
         70px
         65px;
-
     }
 
 
     .progress-box {
-
       width: 100%;
 
       height: 78%;
@@ -646,19 +567,12 @@
         rgba(213,34,93,0.19);
 
       overflow: hidden;
-
     }
 
 
     .progress-text {
-
       color:
         var(--white);
-
-      /*
-         CHANGED:
-         Huge status text.
-      */
 
       font-size:
         clamp(
@@ -676,25 +590,17 @@
 
       text-align: center;
 
-      /*
-         Target approximately 85% of
-         the available red box width.
-      */
-
       width: 85%;
 
       white-space: nowrap;
-
     }
 
 
-
     /* =========================================================
-       SYSTEM ERROR
+       ERROR
        ========================================================= */
 
     .system-message {
-
       position: absolute;
       inset: 0;
 
@@ -711,28 +617,22 @@
         var(--dark-navy);
 
       padding: 60px;
-
     }
 
 
     .system-message h1 {
-
       font-size: 70px;
 
       margin-bottom: 25px;
-
     }
 
 
     .system-message p {
-
       color:
         var(--sky-blue);
 
       font-size: 36px;
-
     }
-
 
 
     /* =========================================================
@@ -741,102 +641,82 @@
 
     @media (max-width: 1500px) {
 
-
       .date-block {
-
         top: 50px;
         right: 65px;
-
       }
 
 
       .date-day {
-
         font-size: 34px;
-
+        font-weight: 400;
       }
 
 
       .date-date {
-
         font-size: 50px;
-
+        font-weight: 400;
       }
 
 
       .schedule-wrapper {
-
         left: 65px;
         right: 65px;
 
         top: 210px;
-
       }
 
 
       .schedule-row {
-
         grid-template-columns:
           270px
           minmax(0,1fr);
-
       }
 
 
       .schedule-time {
-
         font-size: 38px;
-
+        font-weight: 400;
       }
 
 
       .schedule-title {
-
         font-size: 42px;
-
+        font-weight: 400;
       }
 
 
       .no-events {
-
-        font-size: 72px;
-
+        font-size: 68px;
+        font-weight: 400;
       }
 
 
       .event-top {
-
         padding:
           85px
           65px
           35px;
-
       }
 
 
       .event-title {
-
         font-size: 82px;
-
       }
 
 
       .event-time {
-
         font-size: 46px;
-
       }
 
 
       .progress-text {
-
         font-size:
           clamp(
             70px,
             5.6vw,
             92px
           );
-
       }
 
     }
@@ -846,11 +726,9 @@
 </head>
 
 
-
 <body>
 
   <div id="app"></div>
-
 
 
   <script>
@@ -867,7 +745,6 @@
       "sb_publishable_WRI3MJLwDSP4wJscWdBmhA_t50js1al";
 
 
-
     /* =========================================================
        IDLE BACKGROUND
        ========================================================= */
@@ -875,7 +752,6 @@
     const IDLE_BACKGROUND_URL =
       SUPABASE_URL +
       "/storage/v1/object/public/event-assets/idle/idle-background";
-
 
 
     /* =========================================================
@@ -894,7 +770,6 @@
       1000;
 
 
-
     /* =========================================================
        STATE
        ========================================================= */
@@ -902,7 +777,6 @@
     let todayEvents = [];
 
     let lastLoadedDate = null;
-
 
 
     /* =========================================================
@@ -975,7 +849,6 @@
     }
 
 
-
     function getTodayDateString() {
 
       const p =
@@ -993,7 +866,6 @@
     }
 
 
-
     function getCurrentMinutes() {
 
       const p =
@@ -1006,7 +878,6 @@
       );
 
     }
-
 
 
     function getDisplayDate() {
@@ -1028,8 +899,7 @@
 
           }
         )
-        .format(now)
-        .toUpperCase();
+        .format(now);
 
 
       const date =
@@ -1041,15 +911,14 @@
               TIME_ZONE,
 
             day:
-              "2-digit",
+              "numeric",
 
             month:
               "long"
 
           }
         )
-        .format(now)
-        .toUpperCase();
+        .format(now);
 
 
       return {
@@ -1060,7 +929,6 @@
       };
 
     }
-
 
 
     /* =========================================================
@@ -1098,7 +966,6 @@
     }
 
 
-
     function formatTime(
       timeString
     ) {
@@ -1116,7 +983,6 @@
       );
 
     }
-
 
 
     /* =========================================================
@@ -1167,7 +1033,6 @@
     }
 
 
-
     /* =========================================================
        LOAD EVENTS
        ========================================================= */
@@ -1179,7 +1044,6 @@
 
 
       try {
-
 
         const url =
 
@@ -1248,7 +1112,6 @@
 
       catch (error) {
 
-
         console.error(
           "Could not load events:",
           error
@@ -1264,7 +1127,6 @@
     }
 
 
-
     /* =========================================================
        FIND CURRENT EVENT
        ========================================================= */
@@ -1277,7 +1139,6 @@
 
       return todayEvents.find(
         event => {
-
 
           const start =
             timeToMinutes(
@@ -1303,7 +1164,6 @@
       );
 
     }
-
 
 
     /* =========================================================
@@ -1343,7 +1203,6 @@
     }
 
 
-
     /* =========================================================
        IDLE MODE
        ========================================================= */
@@ -1370,7 +1229,6 @@
 
       const dateHtml =
         getDateBlockHtml();
-
 
 
       /* =======================================================
@@ -1417,7 +1275,7 @@
                   class="no-events"
                 >
 
-                  NO EVENTS
+                  Available all day
 
 
                   <div
@@ -1442,7 +1300,6 @@
         return;
 
       }
-
 
 
       /* =======================================================
@@ -1505,7 +1362,6 @@
           .join("");
 
 
-
       app.innerHTML = `
 
         <section
@@ -1553,7 +1409,6 @@
     }
 
 
-
     /* =========================================================
        ACTIVE EVENT MODE
        ========================================================= */
@@ -1576,13 +1431,10 @@
         event.background_url || "";
 
 
-
       let logoHtml;
 
 
-
       if (logo) {
-
 
         logoHtml = `
 
@@ -1600,11 +1452,9 @@
 
         `;
 
-
       }
 
       else {
-
 
         logoHtml = `
 
@@ -1621,7 +1471,6 @@
         `;
 
       }
-
 
 
       const rightStyle =
@@ -1647,7 +1496,6 @@
                 #0285FF 100%
               );
           `;
-
 
 
       app.innerHTML = `
@@ -1717,7 +1565,6 @@
             </div>
 
 
-
             <div
               class="event-bottom"
             >
@@ -1753,7 +1600,6 @@
     }
 
 
-
     /* =========================================================
        ERROR
        ========================================================= */
@@ -1771,130 +1617,4 @@
       app.innerHTML = `
 
         <div
-          class="system-message"
-        >
-
-
-          <h1>
-            Event Display
-          </h1>
-
-
-          <p>
-
-            ${escapeHtml(
-              message
-            )}
-
-          </p>
-
-
-        </div>
-
-      `;
-
-    }
-
-
-
-    /* =========================================================
-       MAIN RENDER
-       ========================================================= */
-
-    function render() {
-
-      const today =
-        getTodayDateString();
-
-
-      /*
-         Automatically refresh after midnight.
-      */
-
-      if (
-
-        lastLoadedDate &&
-
-        today !==
-        lastLoadedDate
-
-      ) {
-
-
-        loadEvents();
-
-        return;
-
-      }
-
-
-
-      const activeEvent =
-        getCurrentEvent();
-
-
-
-      if (activeEvent) {
-
-
-        renderActiveEvent(
-          activeEvent
-        );
-
-
-      }
-
-      else {
-
-
-        renderIdle();
-
-
-      }
-
-    }
-
-
-
-    /* =========================================================
-       START
-       ========================================================= */
-
-    async function start() {
-
-
-      await loadEvents();
-
-
-
-      setInterval(
-
-        render,
-
-        SCREEN_REFRESH_INTERVAL
-
-      );
-
-
-
-      setInterval(
-
-        loadEvents,
-
-        EVENT_REFRESH_INTERVAL
-
-      );
-
-    }
-
-
-
-    start();
-
-
-  </script>
-
-
-</body>
-
-</html>
+          class="
