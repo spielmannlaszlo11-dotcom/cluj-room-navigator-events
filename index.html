@@ -12,7 +12,12 @@
 
   <title>Room Navigator Events</title>
 
+
   <style>
+
+    /* =========================================================
+       COLORS
+       ========================================================= */
 
     :root {
 
@@ -28,6 +33,11 @@
 
     }
 
+
+
+    /* =========================================================
+       GLOBAL
+       ========================================================= */
 
     * {
       box-sizing: border-box;
@@ -129,7 +139,7 @@
 
 
     /* =========================================================
-       CLOCK + DATE
+       IDLE CLOCK + DATE
        ========================================================= */
 
     .date-block {
@@ -150,15 +160,13 @@
 
       color: var(--white);
 
-      font-size: 82px;
-
-      font-weight: 400;
-
       letter-spacing: -0.025em;
 
       margin-bottom: 20px;
 
       position: relative;
+
+      white-space: nowrap;
 
     }
 
@@ -166,10 +174,6 @@
     .date-single-line {
 
       color: var(--white);
-
-      font-size: 38px;
-
-      font-weight: 400;
 
       letter-spacing: -0.01em;
 
@@ -206,10 +210,6 @@
 
       color: var(--white);
 
-      font-size: 72px;
-
-      font-weight: 400;
-
       letter-spacing: -0.02em;
 
       position: relative;
@@ -233,7 +233,7 @@
 
 
     /* =========================================================
-       IDLE SCHEDULE
+       IDLE EVENT LIST
        ========================================================= */
 
     .schedule-wrapper {
@@ -249,6 +249,17 @@
       display: flex;
 
       align-items: flex-start;
+
+      /*
+         IMPORTANT:
+         X/Y movement from Admin is applied here.
+      */
+
+      transform:
+        translate(
+          var(--schedule-x, 0px),
+          var(--schedule-y, 0px)
+        );
 
     }
 
@@ -301,11 +312,8 @@
 
     .schedule-time {
 
-      color: var(--flutter-yellow);
-
-      font-size: 48px;
-
-      font-weight: 400;
+      color:
+        var(--flutter-yellow);
 
       line-height: 1.05;
 
@@ -316,11 +324,8 @@
 
     .schedule-title {
 
-      color: var(--white);
-
-      font-size: 52px;
-
-      font-weight: 400;
+      color:
+        var(--white);
 
       line-height: 1.10;
 
@@ -329,6 +334,8 @@
       white-space: normal;
 
       overflow-wrap: break-word;
+
+      word-break: normal;
 
     }
 
@@ -359,7 +366,8 @@
 
 
     /* =========================================================
-       LEFT IMAGE
+       LEFT EVENT IMAGE
+       960 x 1200 fills the entire panel
        ========================================================= */
 
     .event-left {
@@ -428,9 +436,33 @@
     }
 
 
+    .event-logo-placeholder {
+
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      color:
+        var(--sky-blue);
+
+      font-size: 62px;
+
+      font-weight: 700;
+
+      padding: 60px;
+
+    }
+
+
 
     /* =========================================================
-       RIGHT BACKGROUND
+       RIGHT EVENT BACKGROUND
        ========================================================= */
 
     .event-right {
@@ -502,17 +534,16 @@
 
     .event-title {
 
-      color: var(--white);
-
-      font-size: 98px;
-
-      font-weight: 700;
+      color:
+        var(--white);
 
       line-height: 0.98;
 
-      letter-spacing: -0.035em;
+      letter-spacing:
+        -0.035em;
 
-      overflow-wrap: break-word;
+      overflow-wrap:
+        break-word;
 
       position: relative;
 
@@ -523,11 +554,8 @@
 
     .event-time {
 
-      color: var(--flutter-yellow);
-
-      font-size: 54px;
-
-      font-weight: 700;
+      color:
+        var(--flutter-yellow);
 
       margin-top: 28px;
 
@@ -592,13 +620,18 @@
     }
 
 
+    /*
+       IMPORTANT:
+
+       NO hard-coded font-size here anymore.
+
+       Admin controls the actual size.
+    */
+
     .progress-text {
 
-      color: var(--white);
-
-      font-size: 64px;
-
-      font-weight: 700;
+      color:
+        var(--white);
 
       line-height: 1;
 
@@ -607,6 +640,8 @@
       white-space: nowrap;
 
       position: relative;
+
+      max-width: 92%;
 
     }
 
@@ -622,8 +657,11 @@
       inset: 0;
 
       display: flex;
+
       align-items: center;
       justify-content: center;
+
+      text-align: center;
 
       background:
         var(--dark-navy);
@@ -631,12 +669,16 @@
       color:
         var(--white);
 
+      font-size: 40px;
+
+      padding: 60px;
+
     }
 
 
 
     /* =========================================================
-       NAVIGATOR
+       NAVIGATOR / SMALLER SCREEN
        ========================================================= */
 
     @media (max-width: 1500px) {
@@ -667,11 +709,32 @@
 
       }
 
+
+      .event-top {
+
+        padding:
+          65px
+          55px
+          30px;
+
+      }
+
+
+      .event-bottom {
+
+        padding:
+          35px
+          50px
+          55px;
+
+      }
+
     }
 
   </style>
 
 </head>
+
 
 
 <body>
@@ -680,6 +743,7 @@
 
 
 <script>
+
 
   /* =========================================================
      SUPABASE
@@ -711,59 +775,214 @@
     15000;
 
 
-  let todayEvents = [];
+  const SETTINGS_REFRESH_INTERVAL =
+    3000;
 
 
-  let displaySettings = {
+
+  /* =========================================================
+     STATE
+     ========================================================= */
+
+  let todayEvents =
+    [];
+
+
+  let lastLoadedDate =
+    null;
+
+
+
+  /* =========================================================
+     DEFAULT DISPLAY SETTINGS
+     ========================================================= */
+
+  const DEFAULT_DISPLAY_SETTINGS = {
 
     eventTitle: {
+
       size: 98,
+
       x: 0,
+
       y: 0,
+
       bold: true
+
     },
+
 
     eventTime: {
+
       size: 54,
+
       x: 0,
+
       y: 0,
+
       bold: true
+
     },
+
 
     progressText: {
+
       size: 64,
+
       x: 0,
+
       y: 0,
+
       bold: true
+
     },
+
 
     idleClock: {
+
       size: 82,
+
       x: 0,
+
       y: 0,
+
       bold: false
+
     },
+
 
     idleDate: {
+
       size: 38,
+
       x: 0,
+
       y: 0,
+
       bold: false
+
     },
 
+
     idleAvailable: {
+
       size: 72,
+
       x: 0,
+
       y: 0,
+
       bold: false
+
+    },
+
+
+    /*
+       NEW
+
+       Entire idle event list can move
+       together up/down/left/right.
+    */
+
+    idleSchedule: {
+
+      x: 0,
+
+      y: 0,
+
+      timeSize: 48,
+
+      titleSize: 52,
+
+      timeBold: false,
+
+      titleBold: false
+
     }
 
   };
 
 
+  let displaySettings =
+    JSON.parse(
+      JSON.stringify(
+        DEFAULT_DISPLAY_SETTINGS
+      )
+    );
+
+
 
   /* =========================================================
-     SETTINGS
+     MERGE SETTINGS
+     ========================================================= */
+
+  function mergeDisplaySettings(saved) {
+
+    return {
+
+      eventTitle:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.eventTitle,
+          saved.eventTitle || {}
+        ),
+
+
+      eventTime:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.eventTime,
+          saved.eventTime || {}
+        ),
+
+
+      progressText:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.progressText,
+          saved.progressText || {}
+        ),
+
+
+      idleClock:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleClock,
+          saved.idleClock || {}
+        ),
+
+
+      idleDate:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleDate,
+          saved.idleDate || {}
+        ),
+
+
+      idleAvailable:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleAvailable,
+          saved.idleAvailable || {}
+        ),
+
+
+      idleSchedule:
+        Object.assign(
+          {},
+          DEFAULT_DISPLAY_SETTINGS.idleSchedule,
+          saved.idleSchedule || {}
+        )
+
+    };
+
+  }
+
+
+
+  /* =========================================================
+     LOAD DISPLAY SETTINGS
      ========================================================= */
 
   async function loadDisplaySettings() {
@@ -772,17 +991,25 @@
 
       const response =
         await fetch(
+
           DISPLAY_SETTINGS_URL +
           "?v=" +
           Date.now(),
+
           {
-            cache: "no-store"
+
+            cache:
+              "no-store"
+
           }
+
         );
 
 
       if (!response.ok) {
+
         return;
+
       }
 
 
@@ -791,11 +1018,19 @@
 
 
       displaySettings =
-        Object.assign(
-          {},
-          displaySettings,
+        mergeDisplaySettings(
           saved
         );
+
+
+      /*
+         IMPORTANT FIX:
+
+         Immediately redraw screen after
+         receiving new Admin settings.
+      */
+
+      render();
 
 
     }
@@ -803,7 +1038,7 @@
     catch (error) {
 
       console.log(
-        "Using default display settings."
+        "Using existing display settings."
       );
 
     }
@@ -811,6 +1046,10 @@
   }
 
 
+
+  /* =========================================================
+     STYLE HELPERS
+     ========================================================= */
 
   function textStyle(name) {
 
@@ -823,13 +1062,108 @@
     }
 
 
+    const size =
+      Number(s.size);
+
+
+    const x =
+      Number(s.x);
+
+
+    const y =
+      Number(s.y);
+
+
     return `
-      font-size:${Number(s.size)}px;
-      font-weight:${s.bold ? 700 : 400};
-      transform:translate(
-        ${Number(s.x)}px,
-        ${Number(s.y)}px
-      );
+
+      font-size:
+        ${Number.isFinite(size) ? size : 40}px;
+
+      font-weight:
+        ${s.bold ? 700 : 400};
+
+      transform:
+        translate(
+          ${Number.isFinite(x) ? x : 0}px,
+          ${Number.isFinite(y) ? y : 0}px
+        );
+
+    `;
+
+  }
+
+
+
+  function scheduleWrapperStyle() {
+
+    const s =
+      displaySettings.idleSchedule;
+
+
+    const x =
+      Number(s.x);
+
+
+    const y =
+      Number(s.y);
+
+
+    return `
+
+      --schedule-x:
+        ${Number.isFinite(x) ? x : 0}px;
+
+      --schedule-y:
+        ${Number.isFinite(y) ? y : 0}px;
+
+    `;
+
+  }
+
+
+
+  function scheduleTimeStyle() {
+
+    const s =
+      displaySettings.idleSchedule;
+
+
+    const size =
+      Number(s.timeSize);
+
+
+    return `
+
+      font-size:
+        ${Number.isFinite(size) ? size : 48}px;
+
+      font-weight:
+        ${s.timeBold ? 700 : 400};
+
+    `;
+
+  }
+
+
+
+  function scheduleTitleStyle() {
+
+    const s =
+      displaySettings.idleSchedule;
+
+
+    const size =
+      Number(s.titleSize);
+
+
+    return `
+
+      font-size:
+        ${Number.isFinite(size) ? size : 52}px;
+
+      font-weight:
+        ${s.titleBold ? 700 : 400};
+
     `;
 
   }
@@ -840,22 +1174,37 @@
      DATE / TIME
      ========================================================= */
 
-  function getParts() {
+  function getBucharestParts() {
 
     const formatter =
       new Intl.DateTimeFormat(
         "en-GB",
         {
-          timeZone: TIME_ZONE,
 
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
+          timeZone:
+            TIME_ZONE,
 
-          hour: "2-digit",
-          minute: "2-digit",
+          year:
+            "numeric",
 
-          hour12: false
+          month:
+            "2-digit",
+
+          day:
+            "2-digit",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit",
+
+          second:
+            "2-digit",
+
+          hour12:
+            false
+
         }
       );
 
@@ -872,7 +1221,10 @@
     parts.forEach(
       function(part) {
 
-        if (part.type !== "literal") {
+        if (
+          part.type !==
+          "literal"
+        ) {
 
           values[part.type] =
             part.value;
@@ -892,15 +1244,21 @@
   function getTodayDateString() {
 
     const p =
-      getParts();
+      getBucharestParts();
 
 
     return (
+
       p.year +
+
       "-" +
+
       p.month +
+
       "-" +
+
       p.day
+
     );
 
   }
@@ -910,12 +1268,15 @@
   function getCurrentMinutes() {
 
     const p =
-      getParts();
+      getBucharestParts();
 
 
     return (
+
       Number(p.hour) * 60 +
+
       Number(p.minute)
+
     );
 
   }
@@ -932,56 +1293,86 @@
       new Intl.DateTimeFormat(
         "en-GB",
         {
-          timeZone: TIME_ZONE,
 
-          hour: "2-digit",
-          minute: "2-digit",
+          timeZone:
+            TIME_ZONE,
 
-          hour12: false
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit",
+
+          hour12:
+            false
+
         }
       )
       .format(now);
+
 
 
     const fullDate =
       new Intl.DateTimeFormat(
         "en-US",
         {
-          timeZone: TIME_ZONE,
 
-          weekday: "long",
-          month: "long",
-          day: "numeric"
+          timeZone:
+            TIME_ZONE,
+
+          weekday:
+            "long",
+
+          month:
+            "long",
+
+          day:
+            "numeric"
+
         }
       )
       .format(now);
 
 
     return {
-      time,
-      fullDate
+
+      time:
+        time,
+
+      fullDate:
+        fullDate
+
     };
 
   }
 
 
 
+  /* =========================================================
+     TIME HELPERS
+     ========================================================= */
+
   function timeToMinutes(value) {
 
     if (!value) {
+
       return 0;
+
     }
 
 
-    const p =
+    const pieces =
       value
         .split(":")
         .map(Number);
 
 
     return (
-      (p[0] || 0) * 60 +
-      (p[1] || 0)
+
+      (pieces[0] || 0) * 60 +
+
+      (pieces[1] || 0)
+
     );
 
   }
@@ -991,7 +1382,9 @@
   function formatTime(value) {
 
     if (!value) {
+
       return "";
+
     }
 
 
@@ -1004,28 +1397,40 @@
 
 
 
+  /* =========================================================
+     ESCAPE HTML
+     ========================================================= */
+
   function escapeHtml(value) {
 
-    return String(
-      value || ""
-    )
+    if (
+      value === null ||
+      value === undefined
+    ) {
 
-      .replace(/&/g,"&amp;")
+      return "";
 
-      .replace(/</g,"&lt;")
+    }
 
-      .replace(/>/g,"&gt;")
 
-      .replace(/"/g,"&quot;")
+    return String(value)
 
-      .replace(/'/g,"&#039;");
+      .replace(/&/g, "&amp;")
+
+      .replace(/</g, "&lt;")
+
+      .replace(/>/g, "&gt;")
+
+      .replace(/"/g, "&quot;")
+
+      .replace(/'/g, "&#039;");
 
   }
 
 
 
   /* =========================================================
-     EVENTS
+     LOAD EVENTS
      ========================================================= */
 
   async function loadEvents() {
@@ -1034,54 +1439,93 @@
       getTodayDateString();
 
 
-    const url =
-
-      SUPABASE_URL +
-
-      "/rest/v1/events" +
-
-      "?select=*" +
-
-      "&event_date=eq." +
-
-      encodeURIComponent(today) +
-
-      "&order=start_time.asc";
-
-
     try {
+
+      const url =
+
+        SUPABASE_URL +
+
+        "/rest/v1/events" +
+
+        "?select=*" +
+
+        "&event_date=eq." +
+
+        encodeURIComponent(
+          today
+        ) +
+
+        "&order=start_time.asc";
+
 
       const response =
         await fetch(
           url,
           {
+
+            method:
+              "GET",
+
             headers: {
-              apikey: SUPABASE_KEY
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Accept":
+                "application/json"
+
             },
 
             cache:
               "no-store"
+
           }
         );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Supabase returned " +
+          response.status
+        );
+
+      }
 
 
       todayEvents =
         await response.json();
 
 
+      lastLoadedDate =
+        today;
+
+
       render();
+
 
     }
 
     catch (error) {
 
-      renderError();
+      console.error(
+        error
+      );
+
+
+      renderError(
+        "Unable to load events"
+      );
 
     }
 
   }
 
 
+
+  /* =========================================================
+     CURRENT EVENT
+     ========================================================= */
 
   function getCurrentEvent() {
 
@@ -1092,42 +1536,24 @@
     return todayEvents.find(
       function(event) {
 
-        return (
-
-          now >=
+        const start =
           timeToMinutes(
             event.start_time
-          )
+          );
 
-          &&
 
-          now <
+        const end =
           timeToMinutes(
             event.end_time
-          )
+          );
 
-        );
-
-      }
-    );
-
-  }
-
-
-
-  function getRemainingEvents() {
-
-    const now =
-      getCurrentMinutes();
-
-
-    return todayEvents.filter(
-      function(event) {
 
         return (
-          timeToMinutes(
-            event.end_time
-          ) > now
+
+          now >= start &&
+
+          now < end
+
         );
 
       }
@@ -1138,7 +1564,37 @@
 
 
   /* =========================================================
-     IDLE
+     REMAINING EVENTS
+     ========================================================= */
+
+  function getRemainingEvents() {
+
+    const now =
+      getCurrentMinutes();
+
+
+    return todayEvents.filter(
+      function(event) {
+
+        const end =
+          timeToMinutes(
+            event.end_time
+          );
+
+
+        return (
+          end > now
+        );
+
+      }
+    );
+
+  }
+
+
+
+  /* =========================================================
+     IDLE MODE
      ========================================================= */
 
   function renderIdle() {
@@ -1157,26 +1613,58 @@
       getRemainingEvents();
 
 
+    const background =
+
+      IDLE_BACKGROUND_URL +
+
+      "?v=" +
+
+      Math.floor(
+        Date.now() /
+        60000
+      );
+
+
     let body = "";
 
 
-    if (remaining.length === 0) {
+
+    /* =======================================================
+       AVAILABLE ALL DAY
+       ======================================================= */
+
+    if (
+      remaining.length ===
+      0
+    ) {
+
 
       body = `
 
-        <div class="no-events-wrapper">
+        <div
+          class="no-events-wrapper"
+        >
 
           <div
+
             class="no-events"
-            style="${textStyle("idleAvailable")}"
+
+            style="
+              ${textStyle(
+                "idleAvailable"
+              )}
+            "
+
           >
 
             Available all day
+
 
             <div
               class="no-events-line"
             ></div>
 
+
           </div>
 
         </div>
@@ -1184,44 +1672,96 @@
       `;
 
     }
+
+
+
+    /* =======================================================
+       EVENT LIST
+       ======================================================= */
 
     else {
 
-      body = `
 
-        <div class="schedule-wrapper">
+      const rows =
+        remaining
+          .map(
+            function(event) {
 
-          <div class="schedule">
+              return `
 
-            ${remaining.map(
+                <div
+                  class="schedule-row"
+                >
 
-              function(event) {
 
-                return `
+                  <div
 
-                  <div class="schedule-row">
+                    class="schedule-time"
 
-                    <div class="schedule-time">
+                    style="
+                      ${scheduleTimeStyle()}
+                    "
 
-                      ${formatTime(event.start_time)}
-                      –
-                      ${formatTime(event.end_time)}
+                  >
 
-                    </div>
+                    ${escapeHtml(
+                      formatTime(
+                        event.start_time
+                      )
+                    )}
 
-                    <div class="schedule-title">
+                    –
 
-                      ${escapeHtml(event.title)}
-
-                    </div>
+                    ${escapeHtml(
+                      formatTime(
+                        event.end_time
+                      )
+                    )}
 
                   </div>
 
-                `;
 
-              }
+                  <div
 
-            ).join("")}
+                    class="schedule-title"
+
+                    style="
+                      ${scheduleTitleStyle()}
+                    "
+
+                  >
+
+                    ${escapeHtml(
+                      event.title
+                    )}
+
+                  </div>
+
+
+                </div>
+
+              `;
+
+            }
+          )
+          .join("");
+
+
+      body = `
+
+        <div
+
+          class="schedule-wrapper"
+
+          style="
+            ${scheduleWrapperStyle()}
+          "
+
+        >
+
+          <div class="schedule">
+
+            ${rows}
 
           </div>
 
@@ -1230,41 +1770,75 @@
       `;
 
     }
+
 
 
     app.innerHTML = `
 
       <section
+
         class="idle-screen"
+
         style="
           background-image:
-          url('${IDLE_BACKGROUND_URL}?v=${Date.now()}');
+            url('${background}');
         "
+
       >
+
 
         <div class="idle-content">
 
+
           <div class="date-block">
 
-            <div
-              class="idle-clock"
-              style="${textStyle("idleClock")}"
-            >
-              ${d.time}
-            </div>
 
             <div
-              class="date-single-line"
-              style="${textStyle("idleDate")}"
+
+              class="idle-clock"
+
+              style="
+                ${textStyle(
+                  "idleClock"
+                )}
+              "
+
             >
-              ${d.fullDate}
+
+              ${escapeHtml(
+                d.time
+              )}
+
             </div>
+
+
+            <div
+
+              class="date-single-line"
+
+              style="
+                ${textStyle(
+                  "idleDate"
+                )}
+              "
+
+            >
+
+              ${escapeHtml(
+                d.fullDate
+              )}
+
+            </div>
+
 
           </div>
 
+
           ${body}
 
+
         </div>
+
 
       </section>
 
@@ -1275,7 +1849,7 @@
 
 
   /* =========================================================
-     ACTIVE EVENT
+     ACTIVE EVENT MODE
      ========================================================= */
 
   function renderActiveEvent(event) {
@@ -1294,85 +1868,189 @@
       event.background_url || "";
 
 
+    let logoHtml = "";
+
+
+    if (logo) {
+
+      logoHtml = `
+
+        <img
+
+          class="event-logo"
+
+          src="${escapeHtml(
+            logo
+          )}"
+
+          alt=""
+
+        >
+
+      `;
+
+    }
+
+
+    else {
+
+      logoHtml = `
+
+        <div
+          class="event-logo-placeholder"
+        >
+
+          ${escapeHtml(
+            event.title
+          )}
+
+        </div>
+
+      `;
+
+    }
+
+
+
+    const backgroundStyle =
+
+      background
+
+      ?
+
+      `
+        background-image:
+          url('${escapeHtml(
+            background
+          )}');
+      `
+
+      :
+
+      `
+        background:
+          linear-gradient(
+            145deg,
+            #16215B 0%,
+            #0285FF 100%
+          );
+      `;
+
+
+
     app.innerHTML = `
 
-      <section class="event-screen">
+      <section
+        class="event-screen"
+      >
+
 
         <div class="event-left">
 
-          ${
-            logo
-            ?
-            `
-              <img
-                class="event-logo"
-                src="${escapeHtml(logo)}"
-              >
-            `
-            :
-            ""
-          }
+          ${logoHtml}
 
         </div>
 
 
+
         <div
+
           class="event-right"
+
           style="
-            ${
-              background
-              ?
-              `background-image:url('${escapeHtml(background)}');`
-              :
-              ""
-            }
+            ${backgroundStyle}
           "
+
         >
+
 
           <div class="event-top">
 
+
             <div
+
               class="event-title"
-              style="${textStyle("eventTitle")}"
+
+              style="
+                ${textStyle(
+                  "eventTitle"
+                )}
+              "
+
             >
 
-              ${escapeHtml(event.title)}
+              ${escapeHtml(
+                event.title
+              )}
 
             </div>
+
 
 
             <div
+
               class="event-time"
-              style="${textStyle("eventTime")}"
+
+              style="
+                ${textStyle(
+                  "eventTime"
+                )}
+              "
+
             >
 
-              ${formatTime(event.start_time)}
+              ${escapeHtml(
+                formatTime(
+                  event.start_time
+                )
+              )}
+
               –
-              ${formatTime(event.end_time)}
+
+              ${escapeHtml(
+                formatTime(
+                  event.end_time
+                )
+              )}
 
             </div>
+
 
           </div>
 
 
+
           <div class="event-bottom">
+
 
             <div class="progress-box">
 
+
               <div
+
                 class="progress-text"
-                style="${textStyle("progressText")}"
+
+                style="
+                  ${textStyle(
+                    "progressText"
+                  )}
+                "
+
               >
 
                 IN PROGRESS
 
               </div>
 
+
             </div>
+
 
           </div>
 
+
         </div>
+
 
       </section>
 
@@ -1383,10 +2061,54 @@
 
 
   /* =========================================================
-     RENDER
+     ERROR
+     ========================================================= */
+
+  function renderError(message) {
+
+    document
+      .getElementById(
+        "app"
+      )
+      .innerHTML = `
+
+        <div
+          class="system-message"
+        >
+
+          ${escapeHtml(
+            message
+          )}
+
+        </div>
+
+      `;
+
+  }
+
+
+
+  /* =========================================================
+     MAIN RENDER
      ========================================================= */
 
   function render() {
+
+    const today =
+      getTodayDateString();
+
+
+    if (
+      lastLoadedDate &&
+      today !== lastLoadedDate
+    ) {
+
+      loadEvents();
+
+      return;
+
+    }
+
 
     const current =
       getCurrentEvent();
@@ -1410,50 +2132,67 @@
 
 
 
-  function renderError() {
-
-    document
-      .getElementById("app")
-      .innerHTML = `
-
-        <div class="system-message">
-
-          Unable to load events
-
-        </div>
-
-      `;
-
-  }
-
-
-
   /* =========================================================
      START
      ========================================================= */
 
   async function start() {
 
+    /*
+       Load settings FIRST so the first
+       render already uses correct values.
+    */
+
     await loadDisplaySettings();
+
 
     await loadEvents();
 
 
+
+    /*
+       Clock and event transitions
+       update every second.
+    */
+
     setInterval(
+
       render,
+
       1000
+
     );
 
 
+
+    /*
+       Event database refresh.
+    */
+
     setInterval(
+
       loadEvents,
+
       EVENT_REFRESH_INTERVAL
+
     );
 
 
+
+    /*
+       Admin display changes refresh
+       every 3 seconds.
+
+       loadDisplaySettings() itself
+       calls render() after loading.
+    */
+
     setInterval(
+
       loadDisplaySettings,
-      10000
+
+      SETTINGS_REFRESH_INTERVAL
+
     );
 
   }
@@ -1461,7 +2200,9 @@
 
   start();
 
+
 </script>
+
 
 </body>
 
