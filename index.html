@@ -12,6 +12,7 @@
 
   <title>Room Navigator Events</title>
 
+
   <style>
 
     /* =========================================================
@@ -19,6 +20,7 @@
        ========================================================= */
 
     :root {
+
       --flutter-navy: #16215B;
       --flutter-blue: #0285FF;
       --sky-blue: #CCE5FF;
@@ -28,6 +30,7 @@
       --flutter-yellow: #F8CD4B;
 
       --white: #FFFFFF;
+
     }
 
 
@@ -44,6 +47,7 @@
 
     html,
     body {
+
       width: 100%;
       height: 100%;
 
@@ -60,17 +64,21 @@
 
       -webkit-user-select: none;
       user-select: none;
+
     }
 
 
     #app {
+
       position: relative;
 
       width: 100vw;
       height: 100vh;
 
       overflow: hidden;
+
     }
+
 
 
     /* =========================================================
@@ -78,6 +86,7 @@
        ========================================================= */
 
     .idle-screen {
+
       position: absolute;
       inset: 0;
 
@@ -89,10 +98,12 @@
       background-size: cover;
 
       overflow: hidden;
+
     }
 
 
     .idle-screen::before {
+
       content: "";
 
       position: absolute;
@@ -109,58 +120,72 @@
       pointer-events: none;
 
       z-index: 1;
+
     }
 
 
     .idle-content {
+
       position: relative;
 
       width: 100%;
       height: 100%;
 
       z-index: 2;
+
     }
 
 
+
     /* =========================================================
-       DATE — TOP RIGHT
-       NO BOLD
+       CLOCK + DATE — TOP RIGHT
        ========================================================= */
 
     .date-block {
+
       position: absolute;
 
-      top: 70px;
+      top: 55px;
       right: 95px;
 
       text-align: right;
 
       line-height: 1;
+
     }
 
 
-    .date-day {
-      color: var(--sky-blue);
+    .date-time {
 
-      font-size: 44px;
-
-      font-weight: 400;
-
-      letter-spacing: 0.01em;
-
-      margin-bottom: 14px;
-    }
-
-
-    .date-date {
       color: var(--white);
 
-      font-size: 64px;
+      font-size: 82px;
 
       font-weight: 400;
 
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+
+      margin-bottom: 18px;
+
+      white-space: nowrap;
+
     }
+
+
+    .date-single-line {
+
+      color: var(--white);
+
+      font-size: 40px;
+
+      font-weight: 400;
+
+      letter-spacing: -0.01em;
+
+      white-space: nowrap;
+
+    }
+
 
 
     /* =========================================================
@@ -168,6 +193,7 @@
        ========================================================= */
 
     .no-events-wrapper {
+
       position: absolute;
       inset: 0;
 
@@ -177,10 +203,12 @@
       justify-content: center;
 
       pointer-events: none;
+
     }
 
 
     .no-events {
+
       text-align: center;
 
       color: var(--white);
@@ -190,10 +218,12 @@
       font-weight: 400;
 
       letter-spacing: -0.02em;
+
     }
 
 
     .no-events-line {
+
       width: 150px;
 
       height: 8px;
@@ -203,15 +233,17 @@
       background: var(--flutter-yellow);
 
       border-radius: 20px;
+
     }
+
 
 
     /* =========================================================
        DAILY EVENT SCHEDULE
-       ALSO NO BOLD
        ========================================================= */
 
     .schedule-wrapper {
+
       position: absolute;
 
       left: 90px;
@@ -223,20 +255,24 @@
       display: flex;
 
       align-items: flex-start;
+
     }
 
 
     .schedule {
+
       width: 100%;
 
       display: flex;
       flex-direction: column;
 
       gap: 22px;
+
     }
 
 
     .schedule-row {
+
       width: 100%;
 
       display: grid;
@@ -268,11 +304,14 @@
 
       backdrop-filter:
         blur(12px);
+
     }
 
 
     .schedule-time {
-      color: var(--flutter-yellow);
+
+      color:
+        var(--flutter-yellow);
 
       font-size: 48px;
 
@@ -281,11 +320,14 @@
       line-height: 1.05;
 
       white-space: nowrap;
+
     }
 
 
     .schedule-title {
-      color: var(--white);
+
+      color:
+        var(--white);
 
       font-size: 52px;
 
@@ -300,7 +342,9 @@
       overflow-wrap: break-word;
 
       word-break: normal;
+
     }
+
 
 
     /* =========================================================
@@ -308,6 +352,7 @@
        ========================================================= */
 
     .event-screen {
+
       position: absolute;
       inset: 0;
 
@@ -321,14 +366,17 @@
 
       background:
         var(--dark-navy);
+
     }
 
 
+
     /* =========================================================
-       LEFT SIDE — LOGO / DEPARTMENT IMAGE
+       LEFT SIDE
        ========================================================= */
 
     .event-left {
+
       position: relative;
 
       width: 100%;
@@ -348,10 +396,12 @@
           rgba(22,33,91,0.38) 45%,
           rgba(11,17,46,1) 88%
         );
+
     }
 
 
     .event-left::after {
+
       content: "";
 
       position: absolute;
@@ -375,15 +425,16 @@
       pointer-events: none;
 
       z-index: 5;
+
     }
 
 
     .event-logo {
+
       width: 88%;
       height: 88%;
 
       object-fit: contain;
-
       object-position: center;
 
       position: relative;
@@ -395,10 +446,12 @@
           0 28px 38px
           rgba(0,0,0,0.30)
         );
+
     }
 
 
     .event-logo-placeholder {
+
       width: 80%;
       height: 80%;
 
@@ -415,7 +468,9 @@
       font-size: 62px;
 
       font-weight: 700;
+
     }
+
 
 
     /* =========================================================
@@ -423,6 +478,7 @@
        ========================================================= */
 
     .event-right {
+
       position: relative;
 
       width: 100%;
@@ -438,10 +494,12 @@
 
       grid-template-rows:
         56% 44%;
+
     }
 
 
     .event-right::before {
+
       content: "";
 
       position: absolute;
@@ -458,7 +516,9 @@
       pointer-events: none;
 
       z-index: 1;
+
     }
+
 
 
     /* =========================================================
@@ -466,6 +526,7 @@
        ========================================================= */
 
     .event-top {
+
       position: relative;
 
       z-index: 2;
@@ -480,10 +541,12 @@
         110px
         80px
         40px;
+
     }
 
 
     .event-title {
+
       color:
         var(--white);
 
@@ -500,10 +563,12 @@
         break-word;
 
       max-width: 100%;
+
     }
 
 
     .event-time {
+
       color:
         var(--flutter-yellow);
 
@@ -512,7 +577,9 @@
       font-weight: 700;
 
       margin-top: 28px;
+
     }
+
 
 
     /* =========================================================
@@ -520,6 +587,7 @@
        ========================================================= */
 
     .event-bottom {
+
       position: relative;
 
       z-index: 2;
@@ -533,10 +601,12 @@
         45px
         70px
         65px;
+
     }
 
 
     .progress-box {
+
       width: 100%;
 
       height: 78%;
@@ -567,18 +637,25 @@
         rgba(213,34,93,0.19);
 
       overflow: hidden;
+
     }
 
 
     .progress-text {
+
       color:
         var(--white);
 
+      /*
+         Reduced slightly so it always stays
+         inside the red rectangle.
+      */
+
       font-size:
         clamp(
-          82px,
-          5.7vw,
-          110px
+          58px,
+          4.2vw,
+          80px
         );
 
       font-weight: 700;
@@ -586,14 +663,16 @@
       line-height: 1;
 
       letter-spacing:
-        0.015em;
+        0.01em;
 
       text-align: center;
 
-      width: 85%;
+      max-width: 88%;
 
       white-space: nowrap;
+
     }
+
 
 
     /* =========================================================
@@ -601,6 +680,7 @@
        ========================================================= */
 
     .system-message {
+
       position: absolute;
       inset: 0;
 
@@ -617,106 +697,136 @@
         var(--dark-navy);
 
       padding: 60px;
+
     }
 
 
     .system-message h1 {
+
       font-size: 70px;
 
       margin-bottom: 25px;
+
     }
 
 
     .system-message p {
+
       color:
         var(--sky-blue);
 
       font-size: 36px;
+
     }
 
 
+
     /* =========================================================
-       SMALLER SCREEN FALLBACK
+       SMALLER SCREEN / NAVIGATOR FALLBACK
        ========================================================= */
 
     @media (max-width: 1500px) {
 
+
       .date-block {
-        top: 50px;
+
+        top: 45px;
         right: 65px;
+
       }
 
 
-      .date-day {
-        font-size: 34px;
-        font-weight: 400;
+      .date-time {
+
+        font-size: 68px;
+
+        margin-bottom: 14px;
+
       }
 
 
-      .date-date {
-        font-size: 50px;
-        font-weight: 400;
+      .date-single-line {
+
+        font-size: 32px;
+
       }
 
 
       .schedule-wrapper {
+
         left: 65px;
         right: 65px;
 
         top: 210px;
+
       }
 
 
       .schedule-row {
+
         grid-template-columns:
           270px
           minmax(0,1fr);
+
       }
 
 
       .schedule-time {
+
         font-size: 38px;
-        font-weight: 400;
+
       }
 
 
       .schedule-title {
+
         font-size: 42px;
-        font-weight: 400;
+
       }
 
 
       .no-events {
+
         font-size: 68px;
-        font-weight: 400;
+
       }
 
 
       .event-top {
+
         padding:
           85px
           65px
           35px;
+
       }
 
 
       .event-title {
+
         font-size: 82px;
+
       }
 
 
       .event-time {
+
         font-size: 46px;
+
       }
 
 
       .progress-text {
+
         font-size:
           clamp(
-            70px,
-            5.6vw,
-            92px
+            52px,
+            4.1vw,
+            68px
           );
+
+        max-width: 88%;
+
       }
 
     }
@@ -726,9 +836,11 @@
 </head>
 
 
+
 <body>
 
   <div id="app"></div>
+
 
 
   <script>
@@ -779,6 +891,7 @@
     let lastLoadedDate = null;
 
 
+
     /* =========================================================
        DATE / TIME
        ========================================================= */
@@ -801,9 +914,6 @@
 
             day:
               "2-digit",
-
-            weekday:
-              "long",
 
             hour:
               "2-digit",
@@ -832,9 +942,7 @@
 
       for (const part of parts) {
 
-        if (
-          part.type !== "literal"
-        ) {
+        if (part.type !== "literal") {
 
           values[part.type] =
             part.value;
@@ -847,6 +955,7 @@
       return values;
 
     }
+
 
 
     function getTodayDateString() {
@@ -866,6 +975,7 @@
     }
 
 
+
     function getCurrentMinutes() {
 
       const p =
@@ -880,13 +990,14 @@
     }
 
 
+
     function getDisplayDate() {
 
       const now =
         new Date();
 
 
-      const weekday =
+      const time =
         new Intl.DateTimeFormat(
           "en-GB",
           {
@@ -894,27 +1005,36 @@
             timeZone:
               TIME_ZONE,
 
-            weekday:
-              "long"
+            hour:
+              "2-digit",
+
+            minute:
+              "2-digit",
+
+            hour12:
+              false
 
           }
         )
         .format(now);
 
 
-      const date =
+      const fullDate =
         new Intl.DateTimeFormat(
-          "en-GB",
+          "en-US",
           {
 
             timeZone:
               TIME_ZONE,
 
-            day:
-              "numeric",
+            weekday:
+              "long",
 
             month:
-              "long"
+              "long",
+
+            day:
+              "numeric"
 
           }
         )
@@ -923,12 +1043,16 @@
 
       return {
 
-        weekday,
-        date
+        time:
+          time,
+
+        fullDate:
+          fullDate
 
       };
 
     }
+
 
 
     /* =========================================================
@@ -940,7 +1064,9 @@
     ) {
 
       if (!timeString) {
+
         return 0;
+
       }
 
 
@@ -966,23 +1092,25 @@
     }
 
 
+
     function formatTime(
       timeString
     ) {
 
       if (!timeString) {
+
         return "";
+
       }
 
 
-      return (
-        timeString.substring(
-          0,
-          5
-        )
+      return timeString.substring(
+        0,
+        5
       );
 
     }
+
 
 
     /* =========================================================
@@ -1005,32 +1133,18 @@
 
       return String(value)
 
-        .replaceAll(
-          "&",
-          "&amp;"
-        )
+        .replace(/&/g, "&amp;")
 
-        .replaceAll(
-          "<",
-          "&lt;"
-        )
+        .replace(/</g, "&lt;")
 
-        .replaceAll(
-          ">",
-          "&gt;"
-        )
+        .replace(/>/g, "&gt;")
 
-        .replaceAll(
-          '"',
-          "&quot;"
-        )
+        .replace(/"/g, "&quot;")
 
-        .replaceAll(
-          "'",
-          "&#039;"
-        );
+        .replace(/'/g, "&#039;");
 
     }
+
 
 
     /* =========================================================
@@ -1044,6 +1158,7 @@
 
 
       try {
+
 
         const url =
 
@@ -1112,6 +1227,7 @@
 
       catch (error) {
 
+
         console.error(
           "Could not load events:",
           error
@@ -1127,8 +1243,9 @@
     }
 
 
+
     /* =========================================================
-       FIND CURRENT EVENT
+       CURRENT ACTIVE EVENT
        ========================================================= */
 
     function getCurrentEvent() {
@@ -1138,7 +1255,8 @@
 
 
       return todayEvents.find(
-        event => {
+        function(event) {
+
 
           const start =
             timeToMinutes(
@@ -1153,17 +1271,46 @@
 
 
           return (
-
             now >= start &&
-
             now < end
-
           );
 
         }
       );
 
     }
+
+
+
+    /* =========================================================
+       EVENTS THAT HAVE NOT ENDED
+       ========================================================= */
+
+    function getRemainingEvents() {
+
+      const now =
+        getCurrentMinutes();
+
+
+      return todayEvents.filter(
+        function(event) {
+
+
+          const end =
+            timeToMinutes(
+              event.end_time
+            );
+
+
+          return (
+            end > now
+          );
+
+        }
+      );
+
+    }
+
 
 
     /* =========================================================
@@ -1180,27 +1327,31 @@
 
         <div class="date-block">
 
-          <div class="date-day">
+
+          <div class="date-time">
 
             ${escapeHtml(
-              displayDate.weekday
+              displayDate.time
             )}
 
           </div>
 
-          <div class="date-date">
+
+          <div class="date-single-line">
 
             ${escapeHtml(
-              displayDate.date
+              displayDate.fullDate
             )}
 
           </div>
+
 
         </div>
 
       `;
 
     }
+
 
 
     /* =========================================================
@@ -1231,18 +1382,18 @@
         getDateBlockHtml();
 
 
+      const remainingEvents =
+        getRemainingEvents();
+
+
+
       /* =======================================================
-         NO EVENTS
+         NO EVENTS REMAINING
          ======================================================= */
 
       if (
-
-        !Array.isArray(
-          todayEvents
-        ) ||
-
-        todayEvents.length === 0
-
+        !remainingEvents ||
+        remainingEvents.length === 0
       ) {
 
 
@@ -1302,16 +1453,17 @@
       }
 
 
+
       /* =======================================================
-         EVENTS TODAY
+         REMAINING EVENTS
          ======================================================= */
 
       const scheduleHtml =
 
-        todayEvents
+        remainingEvents
 
           .map(
-            event => {
+            function(event) {
 
               return `
 
@@ -1409,6 +1561,7 @@
     }
 
 
+
     /* =========================================================
        ACTIVE EVENT MODE
        ========================================================= */
@@ -1436,6 +1589,7 @@
 
       if (logo) {
 
+
         logoHtml = `
 
           <img
@@ -1452,9 +1606,11 @@
 
         `;
 
+
       }
 
       else {
+
 
         logoHtml = `
 
@@ -1600,6 +1756,7 @@
     }
 
 
+
     /* =========================================================
        ERROR
        ========================================================= */
@@ -1642,6 +1799,7 @@
     }
 
 
+
     /* =========================================================
        MAIN RENDER
        ========================================================= */
@@ -1653,12 +1811,8 @@
 
 
       if (
-
         lastLoadedDate &&
-
-        today !==
-        lastLoadedDate
-
+        today !== lastLoadedDate
       ) {
 
         loadEvents();
@@ -1689,36 +1843,43 @@
     }
 
 
+
     /* =========================================================
        START
        ========================================================= */
 
     async function start() {
 
+
       await loadEvents();
 
 
+      /*
+         Render every second so the clock
+         updates automatically.
+      */
+
       setInterval(
-
         render,
-
         SCREEN_REFRESH_INTERVAL
-
       );
 
 
+      /*
+         Check Supabase every 15 seconds
+         for new/edited events.
+      */
+
       setInterval(
-
         loadEvents,
-
         EVENT_REFRESH_INTERVAL
-
       );
 
     }
 
 
     start();
+
 
   </script>
 
