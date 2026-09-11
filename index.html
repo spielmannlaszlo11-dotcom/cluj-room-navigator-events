@@ -1617,4 +1617,111 @@
       app.innerHTML = `
 
         <div
-          class="
+          class="system-message"
+        >
+
+
+          <h1>
+            Event Display
+          </h1>
+
+
+          <p>
+
+            ${escapeHtml(
+              message
+            )}
+
+          </p>
+
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       MAIN RENDER
+       ========================================================= */
+
+    function render() {
+
+      const today =
+        getTodayDateString();
+
+
+      if (
+
+        lastLoadedDate &&
+
+        today !==
+        lastLoadedDate
+
+      ) {
+
+        loadEvents();
+
+        return;
+
+      }
+
+
+      const activeEvent =
+        getCurrentEvent();
+
+
+      if (activeEvent) {
+
+        renderActiveEvent(
+          activeEvent
+        );
+
+      }
+
+      else {
+
+        renderIdle();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       START
+       ========================================================= */
+
+    async function start() {
+
+      await loadEvents();
+
+
+      setInterval(
+
+        render,
+
+        SCREEN_REFRESH_INTERVAL
+
+      );
+
+
+      setInterval(
+
+        loadEvents,
+
+        EVENT_REFRESH_INTERVAL
+
+      );
+
+    }
+
+
+    start();
+
+  </script>
+
+</body>
+
+</html>
