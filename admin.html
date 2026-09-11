@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Room Navigator Event Admin</title>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Room Navigator Events Admin</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -18,238 +24,210 @@
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: #f4f6f8;
-      color: #172033;
+      color: #16215B;
     }
 
-    .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 40px 24px;
+    .container {
+      width: min(1050px, 94%);
+      margin: 40px auto;
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 34px;
-    }
-
-    h2 {
-      margin-top: 0;
-    }
-
-    .subtitle {
-      color: #667085;
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 30px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .header p {
+      margin: 5px 0 0;
+      color: #64748b;
     }
 
     .card {
       background: white;
       border-radius: 16px;
-      padding: 24px;
+      padding: 28px;
       margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
     }
 
-    .hidden {
-      display: none !important;
+    h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+
+    .info-box {
+      background: #f7f9fc;
+      border: 1px solid #dbe3ed;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     label {
       display: block;
-      margin-bottom: 7px;
       font-weight: 700;
+      margin-bottom: 8px;
       font-size: 14px;
     }
 
     input {
       width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #d0d5dd;
-      border-radius: 9px;
-      font-size: 16px;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
       background: white;
     }
 
     input:focus {
-      outline: 2px solid #155eef;
-      border-color: transparent;
+      outline: none;
+      border-color: #0285FF;
+      box-shadow: 0 0 0 3px rgba(2,133,255,0.12);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
 
-    .full {
-      grid-column: 1 / -1;
+    .field {
+      margin-bottom: 18px;
     }
 
     button {
-      border: 0;
-      border-radius: 9px;
+      border: none;
+      border-radius: 8px;
       padding: 12px 18px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
     }
 
     .primary {
-      background: #155eef;
+      background: #0285FF;
       color: white;
     }
 
+    .primary:hover {
+      background: #0075e6;
+    }
+
     .secondary {
-      background: #eef2f6;
-      color: #172033;
+      background: #e8eef5;
+      color: #16215B;
     }
 
     .danger {
-      background: #fee4e2;
-      color: #b42318;
-    }
-
-    .top-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;
+      background: #fee2e2;
+      color: #b91c1c;
     }
 
     .button-row {
-      margin-top: 22px;
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
     }
 
-    #message,
-    #idleMessage {
+    .preview-img {
+      display: block;
+      max-width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #eef2f7;
+      margin-top: 12px;
+    }
+
+    .idle-preview {
+      width: 420px;
+      max-width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #0B112E;
+      margin-top: 16px;
+    }
+
+    .message {
       margin-top: 15px;
-      font-weight: 700;
+      min-height: 20px;
+      font-weight: 600;
     }
 
     .success {
-      color: #067647;
+      color: #138a42;
     }
 
     .error {
-      color: #b42318;
+      color: #c62828;
     }
 
-    .event {
-      display: grid;
-      grid-template-columns: 110px 1fr auto;
-      gap: 18px;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid #eaecf0;
+    .event-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 15px;
+      background: #fbfcfe;
     }
 
-    .event:last-child {
-      border-bottom: none;
-    }
-
-    .thumb {
-      width: 110px;
-      height: 75px;
-      object-fit: contain;
-      background: #f2f4f7;
-      border-radius: 9px;
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
     }
 
     .event-title {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 6px;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 7px;
     }
 
     .event-meta {
-      color: #667085;
+      color: #64748b;
+      font-size: 14px;
     }
 
     .event-actions {
       display: flex;
       gap: 8px;
+      flex-shrink: 0;
     }
 
-    .login-box {
-      max-width: 460px;
-      margin: 80px auto;
-    }
-
-    .preview-row {
-      display: flex;
-      gap: 18px;
-      margin-top: 10px;
-    }
-
-    .preview-box {
-      flex: 1;
-    }
-
-    .preview-img {
-      width: 100%;
-      max-height: 180px;
-      object-fit: contain;
-      background: #f2f4f7;
-      border-radius: 10px;
+    #adminSection {
       display: none;
     }
 
-    /* ============================================================
-       IDLE IMAGES
-       ============================================================ */
-
-    .idle-info {
-      background: #f8fafc;
-      border: 1px solid #eaecf0;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
-      color: #475467;
-      font-size: 14px;
-      line-height: 1.5;
+    #loginSection {
+      max-width: 500px;
+      margin: 100px auto;
     }
 
-    .idle-image-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 18px;
-      margin-top: 24px;
+    .login-title {
+      margin-bottom: 5px;
     }
 
-    .idle-card {
-      border: 1px solid #eaecf0;
-      border-radius: 12px;
-      overflow: hidden;
-      background: white;
-    }
-
-    .idle-card img {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
-      display: block;
-      background: #f2f4f7;
-    }
-
-    .idle-card-body {
-      padding: 12px;
-    }
-
-    .idle-filename {
-      font-size: 12px;
-      color: #667085;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-bottom: 10px;
-    }
-
-    .idle-empty {
-      color: #667085;
-      padding: 10px 0;
+    .login-subtitle {
+      color: #64748b;
+      margin-bottom: 25px;
     }
 
     @media (max-width: 750px) {
@@ -258,353 +236,382 @@
         grid-template-columns: 1fr;
       }
 
-      .event {
-        grid-template-columns: 1fr;
-      }
-
-      .event-actions {
-        justify-content: flex-start;
-      }
-
-      .preview-row {
+      .event-header {
         flex-direction: column;
+      }
+
+      .header {
+        align-items: flex-start;
       }
 
     }
 
   </style>
+
 </head>
+
 
 <body>
 
-<div class="page">
 
-  <!-- ==========================================================
-       LOGIN
-       ========================================================== -->
+<!-- =========================================================
+     LOGIN
+     ========================================================= -->
 
-  <div id="loginSection" class="card login-box">
+<div id="loginSection">
 
-    <h1>Navigator Admin</h1>
+  <div class="card">
 
-    <p class="subtitle">
-      Sign in to manage Room Navigator events.
+    <h1 class="login-title">
+      Room Navigator Events
+    </h1>
+
+    <p class="login-subtitle">
+      Sign in to manage Cluj event signage.
     </p>
 
-    <label>Email</label>
+    <div class="field">
 
-    <input
-      id="email"
-      type="email"
-    >
-
-    <div style="height:16px"></div>
-
-    <label>Password</label>
-
-    <input
-      id="password"
-      type="password"
-    >
-
-    <div class="button-row">
-
-      <button
-        class="primary"
-        onclick="login()">
-        Sign in
-      </button>
-
-    </div>
-
-    <div id="loginMessage"></div>
-
-  </div>
-
-
-  <!-- ==========================================================
-       ADMIN
-       ========================================================== -->
-
-  <div
-    id="adminSection"
-    class="hidden"
-  >
-
-    <div class="top-actions">
-
-      <div>
-
-        <h1>
-          Room Navigator Events
-        </h1>
-
-        <div class="subtitle">
-          Cluj event signage management
-        </div>
-
-      </div>
-
-      <button
-        class="secondary"
-        onclick="logout()">
-        Sign out
-      </button>
-
-    </div>
-
-
-    <!-- ========================================================
-         IDLE SCREEN IMAGES
-         ======================================================== -->
-
-    <div class="card">
-
-      <h2>
-        Idle Screen Images
-      </h2>
-
-      <p class="subtitle">
-        These images are shown when no event is currently in progress.
-      </p>
-
-      <div class="idle-info">
-
-        <strong>Recommended format:</strong>
-        1920 × 1200 px, landscape, 16:10.
-
-        <br>
-
-        You can upload multiple images.
-        The Navigator can rotate through them while idle.
-
-      </div>
-
-      <label>
-        Upload Idle Images
-      </label>
+      <label>Email</label>
 
       <input
-        id="idleFiles"
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        multiple
+        id="loginEmail"
+        type="email"
+        autocomplete="username"
       >
 
-      <div class="button-row">
+    </div>
 
-        <button
-          class="primary"
-          onclick="uploadIdleImages()">
-          Upload Idle Images
-        </button>
+    <div class="field">
 
-      </div>
+      <label>Password</label>
 
-      <div id="idleMessage"></div>
-
-      <div
-        id="idleImageList"
-        class="idle-image-list">
-      </div>
+      <input
+        id="loginPassword"
+        type="password"
+        autocomplete="current-password"
+      >
 
     </div>
 
+    <button
+      class="primary"
+      onclick="login()"
+    >
+      Sign in
+    </button>
 
-    <!-- ========================================================
-         ADD / EDIT EVENT
-         ======================================================== -->
-
-    <div class="card">
-
-      <h2 id="formHeading">
-        Add Event
-      </h2>
-
-      <div class="grid">
-
-        <div>
-
-          <label>
-            Date
-          </label>
-
-          <input
-            id="eventDate"
-            type="date"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>
-            Event Title
-          </label>
-
-          <input
-            id="title"
-            type="text"
-            placeholder="e.g. FanDuel Event"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>
-            Start Time
-          </label>
-
-          <input
-            id="startTime"
-            type="time"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>
-            End Time
-          </label>
-
-          <input
-            id="endTime"
-            type="time"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>
-            Logo / Department Image
-          </label>
-
-          <input
-            id="logoFile"
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>
-            Event Background
-          </label>
-
-          <input
-            id="backgroundFile"
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="preview-row">
-
-        <div class="preview-box">
-
-          <p>
-            <strong>
-              Logo preview
-            </strong>
-          </p>
-
-          <img
-            id="logoPreview"
-            class="preview-img"
-          >
-
-        </div>
-
-
-        <div class="preview-box">
-
-          <p>
-            <strong>
-              Background preview
-            </strong>
-          </p>
-
-          <img
-            id="backgroundPreview"
-            class="preview-img"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="button-row">
-
-        <button
-          id="saveButton"
-          class="primary"
-          onclick="saveEvent()">
-          Save Event
-        </button>
-
-
-        <button
-          id="cancelEditButton"
-          class="secondary hidden"
-          onclick="cancelEdit()">
-          Cancel Edit
-        </button>
-
-      </div>
-
-      <div id="message"></div>
-
-    </div>
-
-
-    <!-- ========================================================
-         UPCOMING EVENTS
-         ======================================================== -->
-
-    <div class="card">
-
-      <h2>
-        Upcoming Events
-      </h2>
-
-      <div id="eventList">
-        Loading...
-      </div>
-
-    </div>
+    <div
+      id="loginMessage"
+      class="message"
+    ></div>
 
   </div>
 
 </div>
 
 
+
+<!-- =========================================================
+     ADMIN
+     ========================================================= -->
+
+<div
+  id="adminSection"
+  class="container"
+>
+
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <div>
+
+      <h1>
+        Room Navigator Events
+      </h1>
+
+      <p>
+        Cluj event signage management
+      </p>
+
+    </div>
+
+
+    <button
+      class="secondary"
+      onclick="logout()"
+    >
+      Sign out
+    </button>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       IDLE BACKGROUND
+       ======================================================= -->
+
+  <div class="card">
+
+    <h2>
+      Idle Background
+    </h2>
+
+    <p class="subtitle">
+      This image is displayed when no event is currently in progress.
+    </p>
+
+
+    <div class="info-box">
+
+      <strong>Recommended format:</strong>
+      1920 × 1200 px, landscape, 16:10.
+
+      <br>
+
+      Uploading a new image will automatically replace the previous idle background.
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Idle Background Image
+      </label>
+
+      <input
+        id="idleBackgroundFile"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+      >
+
+    </div>
+
+
+    <img
+      id="idleBackgroundPreview"
+      class="idle-preview"
+      alt=""
+    >
+
+
+    <div class="button-row">
+
+      <button
+        class="primary"
+        onclick="saveIdleBackground()"
+      >
+        Save Idle Background
+      </button>
+
+
+      <button
+        class="danger"
+        onclick="deleteIdleBackground()"
+      >
+        Remove Background
+      </button>
+
+    </div>
+
+
+    <div
+      id="idleMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       ADD / EDIT EVENT
+       ======================================================= -->
+
+  <div class="card">
+
+    <h2 id="formHeading">
+      Add Event
+    </h2>
+
+
+    <div class="grid">
+
+
+      <div class="field">
+
+        <label>
+          Date
+        </label>
+
+        <input
+          id="eventDate"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Event Title
+        </label>
+
+        <input
+          id="eventTitle"
+          type="text"
+          placeholder="e.g. FanDuel Event"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Start Time
+        </label>
+
+        <input
+          id="startTime"
+          type="time"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          End Time
+        </label>
+
+        <input
+          id="endTime"
+          type="time"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Logo / Department Image
+        </label>
+
+        <input
+          id="logoFile"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+        >
+
+        <img
+          id="logoPreview"
+          class="preview-img"
+          style="display:none;"
+          alt=""
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Event Background
+        </label>
+
+        <input
+          id="backgroundFile"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+        >
+
+        <img
+          id="backgroundPreview"
+          class="preview-img"
+          style="display:none;"
+          alt=""
+        >
+
+      </div>
+
+
+    </div>
+
+
+    <div class="button-row">
+
+
+      <button
+        id="saveEventButton"
+        class="primary"
+        onclick="saveEvent()"
+      >
+        Save Event
+      </button>
+
+
+      <button
+        id="cancelEditButton"
+        class="secondary"
+        onclick="cancelEdit()"
+        style="display:none;"
+      >
+        Cancel Edit
+      </button>
+
+
+    </div>
+
+
+    <div
+      id="eventMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       UPCOMING EVENTS
+       ======================================================= -->
+
+  <div class="card">
+
+    <h2>
+      Upcoming Events
+    </h2>
+
+    <div id="eventsList"></div>
+
+  </div>
+
+
+</div>
+
+
+
 <script>
 
-/* ============================================================
+
+/* =========================================================
    SUPABASE
-   ============================================================ */
+   ========================================================= */
 
 const SUPABASE_URL =
-  'https://wdcrihymqrbiljncxvbs.supabase.co';
+  "https://wdcrihymqrbiljncxvbs.supabase.co";
 
 
 const SUPABASE_KEY =
-  'sb_publishable_WRI3MJLwDSP4wJscWdBmhA_t50js1al';
+  "sb_publishable_WRI3MJLwDSP4wJscWdBmhA_t50js1al";
 
 
 const sb =
@@ -614,6 +621,31 @@ const sb =
   );
 
 
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+const TIME_ZONE =
+  "Europe/Bucharest";
+
+
+/*
+   IMPORTANT
+
+   This is the EXACT SAME path
+   that index.html uses.
+*/
+
+const IDLE_BACKGROUND_PATH =
+  "idle/idle-background";
+
+
+
+/* =========================================================
+   EVENT EDIT STATE
+   ========================================================= */
+
 let editingEventId = null;
 
 let existingLogoUrl = null;
@@ -621,57 +653,62 @@ let existingLogoUrl = null;
 let existingBackgroundUrl = null;
 
 
-/* ============================================================
-   AUTH
-   ============================================================ */
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
 
 async function login() {
 
   const email =
     document
-      .getElementById('email')
+      .getElementById("loginEmail")
       .value
       .trim();
 
 
   const password =
     document
-      .getElementById('password')
+      .getElementById("loginPassword")
       .value;
 
 
-  const msg =
-    document
-      .getElementById('loginMessage');
+  const message =
+    document.getElementById(
+      "loginMessage"
+    );
 
 
-  msg.textContent =
-    'Signing in...';
+  message.textContent =
+    "Signing in...";
+
+  message.className =
+    "message";
 
 
-  const { error } =
-    await sb.auth
-      .signInWithPassword({
-        email,
-        password
-      });
+  const {
+    data,
+    error
+  } =
+    await sb.auth.signInWithPassword({
+
+      email,
+      password
+
+    });
 
 
   if (error) {
 
-    msg.textContent =
+    message.textContent =
       error.message;
 
-    msg.className =
-      'error';
+    message.className =
+      "message error";
 
     return;
 
   }
-
-
-  msg.textContent =
-    '';
 
 
   showAdmin();
@@ -679,266 +716,734 @@ async function login() {
 }
 
 
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
 async function logout() {
 
   await sb.auth.signOut();
 
-
-  document
-    .getElementById('adminSection')
-    .classList
-    .add('hidden');
-
-
-  document
-    .getElementById('loginSection')
-    .classList
-    .remove('hidden');
+  showLogin();
 
 }
 
 
+
+/* =========================================================
+   SESSION
+   ========================================================= */
+
 async function checkSession() {
 
   const {
-    data: {
-      session
-    }
+    data
   } =
-    await sb.auth
-      .getSession();
+    await sb.auth.getSession();
 
 
-  if (session) {
+  if (
+    data &&
+    data.session
+  ) {
 
     showAdmin();
 
   }
 
-}
+  else {
 
-
-function showAdmin() {
-
-  document
-    .getElementById('loginSection')
-    .classList
-    .add('hidden');
-
-
-  document
-    .getElementById('adminSection')
-    .classList
-    .remove('hidden');
-
-
-  setDefaultDate();
-
-  loadEvents();
-
-  loadIdleImages();
-
-}
-
-
-/* ============================================================
-   DATE
-   ============================================================ */
-
-function localDateString() {
-
-  const parts =
-    new Intl.DateTimeFormat(
-      'en-CA',
-      {
-        timeZone:
-          'Europe/Bucharest',
-
-        year:
-          'numeric',
-
-        month:
-          '2-digit',
-
-        day:
-          '2-digit'
-      }
-    )
-    .formatToParts(
-      new Date()
-    );
-
-
-  const year =
-    parts.find(
-      p =>
-        p.type === 'year'
-    ).value;
-
-
-  const month =
-    parts.find(
-      p =>
-        p.type === 'month'
-    ).value;
-
-
-  const day =
-    parts.find(
-      p =>
-        p.type === 'day'
-    ).value;
-
-
-  return (
-    `${year}-${month}-${day}`
-  );
-
-}
-
-
-function setDefaultDate() {
-
-  const input =
-    document
-      .getElementById('eventDate');
-
-
-  if (!input.value) {
-
-    input.value =
-      localDateString();
+    showLogin();
 
   }
 
 }
 
 
-/* ============================================================
-   EVENT FILE UPLOAD
-   ============================================================ */
 
-async function uploadFile(
-  file,
-  type
-) {
+/* =========================================================
+   SHOW ADMIN
+   ========================================================= */
 
-  if (!file)
-    return null;
+function showAdmin() {
 
-
-  const extension =
-    file.name
-      .split('.')
-      .pop();
+  document
+    .getElementById(
+      "loginSection"
+    )
+    .style.display =
+    "none";
 
 
-  const filename =
-    `${type}/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+  document
+    .getElementById(
+      "adminSection"
+    )
+    .style.display =
+    "block";
 
 
-  const { error } =
-    await sb.storage
-      .from('event-assets')
-      .upload(
-        filename,
-        file,
-        {
-          cacheControl:
-            '3600',
+  setDefaultDate();
 
-          upsert:
-            false
-        }
-      );
+  showIdleBackground();
+
+  loadEvents();
+
+}
 
 
-  if (error)
-    throw error;
+
+/* =========================================================
+   SHOW LOGIN
+   ========================================================= */
+
+function showLogin() {
+
+  document
+    .getElementById(
+      "adminSection"
+    )
+    .style.display =
+    "none";
 
 
-  const { data } =
-    sb.storage
-      .from('event-assets')
-      .getPublicUrl(
-        filename
-      );
+  document
+    .getElementById(
+      "loginSection"
+    )
+    .style.display =
+    "block";
+
+}
 
 
-  return (
-    data.publicUrl
+
+/* =========================================================
+   BUCHAREST TODAY
+   ========================================================= */
+
+function getTodayDate() {
+
+  return new Intl.DateTimeFormat(
+    "en-CA",
+    {
+
+      timeZone:
+        TIME_ZONE,
+
+      year:
+        "numeric",
+
+      month:
+        "2-digit",
+
+      day:
+        "2-digit"
+
+    }
+  )
+  .format(
+    new Date()
   );
 
 }
 
 
-/* ============================================================
-   SAVE EVENT
-   ============================================================ */
+
+/* =========================================================
+   DEFAULT DATE
+   ========================================================= */
+
+function setDefaultDate() {
+
+  const input =
+    document.getElementById(
+      "eventDate"
+    );
+
+
+  if (!input.value) {
+
+    input.value =
+      getTodayDate();
+
+  }
+
+}
+
+
+
+/* =========================================================
+   IDLE BACKGROUND PREVIEW
+   ========================================================= */
+
+function showIdleBackground() {
+
+  const {
+    data
+  } =
+    sb.storage
+      .from("event-assets")
+      .getPublicUrl(
+        IDLE_BACKGROUND_PATH
+      );
+
+
+  const img =
+    document.getElementById(
+      "idleBackgroundPreview"
+    );
+
+
+  /*
+     Cache-busting query ensures
+     the newest image is displayed.
+  */
+
+  img.src =
+    data.publicUrl +
+    "?t=" +
+    Date.now();
+
+}
+
+
+
+/* =========================================================
+   SELECT IDLE BACKGROUND PREVIEW
+   ========================================================= */
+
+document
+  .getElementById(
+    "idleBackgroundFile"
+  )
+  .addEventListener(
+    "change",
+    function() {
+
+
+      const file =
+        this.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      const img =
+        document.getElementById(
+          "idleBackgroundPreview"
+        );
+
+
+      img.src =
+        URL.createObjectURL(
+          file
+        );
+
+
+    }
+  );
+
+
+
+/* =========================================================
+   SAVE IDLE BACKGROUND
+   ========================================================= */
+
+async function saveIdleBackground() {
+
+  const input =
+    document.getElementById(
+      "idleBackgroundFile"
+    );
+
+
+  const file =
+    input.files[0];
+
+
+  const message =
+    document.getElementById(
+      "idleMessage"
+    );
+
+
+  if (!file) {
+
+    message.textContent =
+      "Please choose an image first.";
+
+    message.className =
+      "message error";
+
+    return;
+
+  }
+
+
+  try {
+
+
+    message.textContent =
+      "Uploading idle background...";
+
+    message.className =
+      "message";
+
+
+    /*
+       IMPORTANT
+
+       No random filename anymore.
+
+       Every upload goes to:
+
+       event-assets/
+       └── idle/
+           └── idle-background
+
+       upsert:true means replace the old one.
+    */
+
+    const {
+      error
+    } =
+      await sb.storage
+        .from(
+          "event-assets"
+        )
+        .upload(
+          IDLE_BACKGROUND_PATH,
+          file,
+          {
+
+            upsert:
+              true,
+
+            contentType:
+              file.type,
+
+            cacheControl:
+              "60"
+
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    message.textContent =
+      "Idle background updated successfully.";
+
+    message.className =
+      "message success";
+
+
+    input.value =
+      "";
+
+
+    showIdleBackground();
+
+
+  }
+
+  catch (error) {
+
+
+    console.error(
+      error
+    );
+
+
+    message.textContent =
+      "Error: " +
+      error.message;
+
+
+    message.className =
+      "message error";
+
+  }
+
+}
+
+
+
+/* =========================================================
+   DELETE IDLE BACKGROUND
+   ========================================================= */
+
+async function deleteIdleBackground() {
+
+  const confirmed =
+    confirm(
+      "Remove the current idle background?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const message =
+    document.getElementById(
+      "idleMessage"
+    );
+
+
+  try {
+
+
+    const {
+      error
+    } =
+      await sb.storage
+        .from(
+          "event-assets"
+        )
+        .remove([
+          IDLE_BACKGROUND_PATH
+        ]);
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    document
+      .getElementById(
+        "idleBackgroundPreview"
+      )
+      .removeAttribute(
+        "src"
+      );
+
+
+    message.textContent =
+      "Idle background removed.";
+
+    message.className =
+      "message success";
+
+
+  }
+
+  catch (error) {
+
+
+    message.textContent =
+      "Error: " +
+      error.message;
+
+
+    message.className =
+      "message error";
+
+  }
+
+}
+
+
+
+/* =========================================================
+   IMAGE PREVIEW — EVENT LOGO
+   ========================================================= */
+
+document
+  .getElementById(
+    "logoFile"
+  )
+  .addEventListener(
+    "change",
+    function() {
+
+
+      const file =
+        this.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      const preview =
+        document.getElementById(
+          "logoPreview"
+        );
+
+
+      preview.src =
+        URL.createObjectURL(
+          file
+        );
+
+
+      preview.style.display =
+        "block";
+
+
+    }
+  );
+
+
+
+/* =========================================================
+   IMAGE PREVIEW — EVENT BACKGROUND
+   ========================================================= */
+
+document
+  .getElementById(
+    "backgroundFile"
+  )
+  .addEventListener(
+    "change",
+    function() {
+
+
+      const file =
+        this.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      const preview =
+        document.getElementById(
+          "backgroundPreview"
+        );
+
+
+      preview.src =
+        URL.createObjectURL(
+          file
+        );
+
+
+      preview.style.display =
+        "block";
+
+
+    }
+  );
+
+
+
+/* =========================================================
+   FILE EXTENSION
+   ========================================================= */
+
+function getExtension(file) {
+
+  const name =
+    file.name || "";
+
+
+  const pieces =
+    name.split(".");
+
+
+  if (
+    pieces.length > 1
+  ) {
+
+    return pieces
+      .pop()
+      .toLowerCase();
+
+  }
+
+
+  if (
+    file.type ===
+    "image/png"
+  ) {
+
+    return "png";
+
+  }
+
+
+  if (
+    file.type ===
+    "image/webp"
+  ) {
+
+    return "webp";
+
+  }
+
+
+  return "jpg";
+
+}
+
+
+
+/* =========================================================
+   UPLOAD EVENT FILE
+   ========================================================= */
+
+async function uploadEventFile(
+  file,
+  folder
+) {
+
+  const extension =
+    getExtension(
+      file
+    );
+
+
+  const path =
+
+    folder +
+
+    "/" +
+
+    Date.now() +
+
+    "-" +
+
+    crypto.randomUUID() +
+
+    "." +
+
+    extension;
+
+
+  const {
+    error
+  } =
+    await sb.storage
+      .from(
+        "event-assets"
+      )
+      .upload(
+        path,
+        file,
+        {
+
+          cacheControl:
+            "3600",
+
+          upsert:
+            false,
+
+          contentType:
+            file.type
+
+        }
+      );
+
+
+  if (error) {
+    throw error;
+  }
+
+
+  const {
+    data
+  } =
+    sb.storage
+      .from(
+        "event-assets"
+      )
+      .getPublicUrl(
+        path
+      );
+
+
+  return data.publicUrl;
+
+}
+
+
+
+/* =========================================================
+   SAVE / UPDATE EVENT
+   ========================================================= */
 
 async function saveEvent() {
 
-  const msg =
+  const date =
     document
-      .getElementById('message');
-
-
-  msg.textContent =
-    '';
-
-  msg.className =
-    '';
-
-
-  const eventDate =
-    document
-      .getElementById('eventDate')
+      .getElementById(
+        "eventDate"
+      )
       .value;
 
 
   const title =
     document
-      .getElementById('title')
+      .getElementById(
+        "eventTitle"
+      )
       .value
       .trim();
 
 
   const startTime =
     document
-      .getElementById('startTime')
+      .getElementById(
+        "startTime"
+      )
       .value;
 
 
   const endTime =
     document
-      .getElementById('endTime')
+      .getElementById(
+        "endTime"
+      )
       .value;
 
 
   const logoFile =
     document
-      .getElementById('logoFile')
+      .getElementById(
+        "logoFile"
+      )
       .files[0];
 
 
   const backgroundFile =
     document
-      .getElementById('backgroundFile')
+      .getElementById(
+        "backgroundFile"
+      )
       .files[0];
 
 
+  const message =
+    document.getElementById(
+      "eventMessage"
+    );
+
+
   if (
-    !eventDate ||
+    !date ||
     !title ||
     !startTime ||
     !endTime
   ) {
 
-    msg.textContent =
-      'Please complete date, title, start time and end time.';
+    message.textContent =
+      "Please complete the date, title, start time and end time.";
 
-    msg.className =
-      'error';
+    message.className =
+      "message error";
 
     return;
 
@@ -949,11 +1454,11 @@ async function saveEvent() {
     endTime <= startTime
   ) {
 
-    msg.textContent =
-      'End time must be later than start time.';
+    message.textContent =
+      "End time must be later than start time.";
 
-    msg.className =
-      'error';
+    message.className =
+      "message error";
 
     return;
 
@@ -962,8 +1467,17 @@ async function saveEvent() {
 
   try {
 
-    msg.textContent =
-      'Saving event...';
+
+    message.textContent =
+      editingEventId
+        ?
+        "Updating event..."
+        :
+        "Saving event...";
+
+
+    message.className =
+      "message";
 
 
     let logoUrl =
@@ -974,32 +1488,46 @@ async function saveEvent() {
       existingBackgroundUrl;
 
 
+
     if (logoFile) {
 
+      message.textContent =
+        "Uploading logo...";
+
+
       logoUrl =
-        await uploadFile(
+        await uploadEventFile(
           logoFile,
-          'logos'
+          "logos"
         );
 
     }
+
 
 
     if (backgroundFile) {
 
+      message.textContent =
+        "Uploading event background...";
+
+
       backgroundUrl =
-        await uploadFile(
+        await uploadEventFile(
           backgroundFile,
-          'backgrounds'
+          "backgrounds"
         );
 
     }
 
 
-    const record = {
+
+    const eventData = {
 
       event_date:
-        eventDate,
+        date,
+
+      title:
+        title,
 
       start_time:
         startTime,
@@ -1007,105 +1535,123 @@ async function saveEvent() {
       end_time:
         endTime,
 
-      title:
-        title,
-
       logo_url:
-        logoUrl,
+        logoUrl || null,
 
       background_url:
-        backgroundUrl
+        backgroundUrl || null
 
     };
 
 
-    let result;
-
 
     if (editingEventId) {
 
-      result =
+
+      const {
+        error
+      } =
         await sb
-          .from('events')
+          .from(
+            "events"
+          )
           .update(
-            record
+            eventData
           )
           .eq(
-            'id',
+            "id",
             editingEventId
           );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      message.textContent =
+        "Event updated successfully.";
+
 
     }
 
     else {
 
-      result =
+
+      const {
+        error
+      } =
         await sb
-          .from('events')
-          .insert(
-            record
-          );
+          .from(
+            "events"
+          )
+          .insert([
+            eventData
+          ]);
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      message.textContent =
+        "Event saved successfully.";
 
     }
 
 
-    if (result.error)
-      throw result.error;
+    message.className =
+      "message success";
 
 
-    msg.textContent =
-      editingEventId
-        ? 'Event updated successfully.'
-        : 'Event created successfully.';
+    resetEventForm();
 
+    loadEvents();
 
-    msg.className =
-      'success';
-
-
-    resetForm();
-
-    await loadEvents();
 
   }
 
   catch (error) {
+
 
     console.error(
       error
     );
 
 
-    msg.textContent =
-      'Error: ' +
+    message.textContent =
+      "Error: " +
       error.message;
 
 
-    msg.className =
-      'error';
+    message.className =
+      "message error";
 
   }
 
 }
 
 
-/* ============================================================
+
+/* =========================================================
    LOAD EVENTS
-   ============================================================ */
+   ========================================================= */
 
 async function loadEvents() {
 
-  const container =
-    document
-      .getElementById('eventList');
+  const list =
+    document.getElementById(
+      "eventsList"
+    );
 
 
-  container.textContent =
-    'Loading...';
+  list.innerHTML =
+    "Loading events...";
 
 
   const today =
-    localDateString();
+    getTodayDate();
 
 
   const {
@@ -1113,21 +1659,25 @@ async function loadEvents() {
     error
   } =
     await sb
-      .from('events')
-      .select('*')
+      .from(
+        "events"
+      )
+      .select(
+        "*"
+      )
       .gte(
-        'event_date',
+        "event_date",
         today
       )
       .order(
-        'event_date',
+        "event_date",
         {
           ascending:
             true
         }
       )
       .order(
-        'start_time',
+        "start_time",
         {
           ascending:
             true
@@ -1137,8 +1687,10 @@ async function loadEvents() {
 
   if (error) {
 
-    container.innerHTML =
-      `<span class="error">${escapeHtml(error.message)}</span>`;
+    list.innerHTML =
+      '<div class="error">' +
+      error.message +
+      "</div>";
 
     return;
 
@@ -1150,96 +1702,86 @@ async function loadEvents() {
     data.length === 0
   ) {
 
-    container.innerHTML =
-      '<p>No upcoming events.</p>';
+    list.innerHTML =
+      '<p style="color:#64748b;">No upcoming events.</p>';
 
     return;
 
   }
 
 
-  container.innerHTML =
-    '';
+  list.innerHTML =
+    "";
 
 
   data.forEach(
     event => {
 
-      const row =
-        document
-          .createElement(
-            'div'
-          );
 
-
-      row.className =
-        'event';
-
-
-      const image =
-        event.logo_url
-          ?
-          `
-          <img
-            class="thumb"
-            src="${event.logo_url}"
-          >
-          `
-          :
-          `
-          <div class="thumb"></div>
-          `;
-
-
-      row.innerHTML =
-        `
-        ${image}
-
-        <div>
-
-          <div class="event-title">
-            ${escapeHtml(event.title)}
-          </div>
-
-          <div class="event-meta">
-
-            ${event.event_date}
-
-            &nbsp; • &nbsp;
-
-            ${event.start_time.substring(0,5)}
-
-            –
-
-            ${event.end_time.substring(0,5)}
-
-          </div>
-
-        </div>
-
-
-        <div class="event-actions">
-
-          <button
-            class="secondary"
-            onclick="editEvent(${event.id})">
-            Edit
-          </button>
-
-          <button
-            class="danger"
-            onclick="deleteEvent(${event.id})">
-            Delete
-          </button>
-
-        </div>
-        `;
-
-
-      container
-        .appendChild(
-          row
+      const card =
+        document.createElement(
+          "div"
         );
+
+
+      card.className =
+        "event-card";
+
+
+      card.innerHTML = `
+
+        <div class="event-header">
+
+          <div>
+
+            <div class="event-title">
+              ${escapeHtml(event.title)}
+            </div>
+
+            <div class="event-meta">
+
+              ${escapeHtml(event.event_date)}
+
+              &nbsp; • &nbsp;
+
+              ${formatTime(event.start_time)}
+
+              –
+
+              ${formatTime(event.end_time)}
+
+            </div>
+
+          </div>
+
+
+          <div class="event-actions">
+
+            <button
+              class="secondary"
+              onclick="editEvent(${event.id})"
+            >
+              Edit
+            </button>
+
+
+            <button
+              class="danger"
+              onclick="deleteEvent(${event.id})"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      list.appendChild(
+        card
+      );
 
     }
   );
@@ -1247,9 +1789,10 @@ async function loadEvents() {
 }
 
 
-/* ============================================================
+
+/* =========================================================
    EDIT EVENT
-   ============================================================ */
+   ========================================================= */
 
 async function editEvent(id) {
 
@@ -1258,10 +1801,14 @@ async function editEvent(id) {
     error
   } =
     await sb
-      .from('events')
-      .select('*')
+      .from(
+        "events"
+      )
+      .select(
+        "*"
+      )
       .eq(
-        'id',
+        "id",
         id
       )
       .single();
@@ -1291,133 +1838,156 @@ async function editEvent(id) {
 
 
   document
-    .getElementById('eventDate')
+    .getElementById(
+      "eventDate"
+    )
     .value =
-      data.event_date;
+    data.event_date;
 
 
   document
-    .getElementById('title')
+    .getElementById(
+      "eventTitle"
+    )
     .value =
-      data.title;
+    data.title;
 
 
   document
-    .getElementById('startTime')
+    .getElementById(
+      "startTime"
+    )
     .value =
+    formatTime(
       data.start_time
-        .substring(
-          0,
-          5
-        );
+    );
 
 
   document
-    .getElementById('endTime')
+    .getElementById(
+      "endTime"
+    )
     .value =
+    formatTime(
       data.end_time
-        .substring(
-          0,
-          5
-        );
+    );
+
+
+  const logoPreview =
+    document.getElementById(
+      "logoPreview"
+    );
 
 
   if (data.logo_url) {
 
-    const img =
-      document
-        .getElementById(
-          'logoPreview'
-        );
-
-
-    img.src =
+    logoPreview.src =
       data.logo_url;
 
+    logoPreview.style.display =
+      "block";
 
-    img.style.display =
-      'block';
+  }
+
+  else {
+
+    logoPreview.style.display =
+      "none";
 
   }
 
 
-  if (
-    data.background_url
-  ) {
 
-    const img =
-      document
-        .getElementById(
-          'backgroundPreview'
-        );
-
-
-    img.src =
-      data.background_url;
-
-
-    img.style.display =
-      'block';
-
-  }
-
-
-  document
-    .getElementById(
-      'formHeading'
-    )
-    .textContent =
-      'Edit Event';
-
-
-  document
-    .getElementById(
-      'saveButton'
-    )
-    .textContent =
-      'Update Event';
-
-
-  document
-    .getElementById(
-      'cancelEditButton'
-    )
-    .classList
-    .remove(
-      'hidden'
+  const backgroundPreview =
+    document.getElementById(
+      "backgroundPreview"
     );
 
 
+  if (data.background_url) {
+
+    backgroundPreview.src =
+      data.background_url;
+
+    backgroundPreview.style.display =
+      "block";
+
+  }
+
+  else {
+
+    backgroundPreview.style.display =
+      "none";
+
+  }
+
+
+
+  document
+    .getElementById(
+      "formHeading"
+    )
+    .textContent =
+    "Edit Event";
+
+
+  document
+    .getElementById(
+      "saveEventButton"
+    )
+    .textContent =
+    "Update Event";
+
+
+  document
+    .getElementById(
+      "cancelEditButton"
+    )
+    .style.display =
+    "inline-block";
+
+
+  document
+    .getElementById(
+      "eventMessage"
+    )
+    .textContent =
+    "";
+
+
   window.scrollTo({
+
     top:
       document
         .getElementById(
-          'formHeading'
+          "formHeading"
         )
         .offsetTop -
-      80,
+      40,
 
     behavior:
-      'smooth'
+      "smooth"
+
   });
 
 }
 
 
-/* ============================================================
+
+/* =========================================================
    DELETE EVENT
-   ============================================================ */
+   ========================================================= */
 
 async function deleteEvent(id) {
 
-  if (
-    !confirm(
-      'Are you sure you want to delete this event?'
-    )
-  ) {
+  const confirmed =
+    confirm(
+      "Delete this event?"
+    );
 
+
+  if (!confirmed) {
     return;
-
   }
 
 
@@ -1425,10 +1995,12 @@ async function deleteEvent(id) {
     error
   } =
     await sb
-      .from('events')
+      .from(
+        "events"
+      )
       .delete()
       .eq(
-        'id',
+        "id",
         id
       );
 
@@ -1444,16 +2016,38 @@ async function deleteEvent(id) {
   }
 
 
-  await loadEvents();
+  if (
+    editingEventId === id
+  ) {
+
+    resetEventForm();
+
+  }
+
+
+  loadEvents();
 
 }
 
 
-/* ============================================================
-   RESET EVENT FORM
-   ============================================================ */
 
-function resetForm() {
+/* =========================================================
+   CANCEL EDIT
+   ========================================================= */
+
+function cancelEdit() {
+
+  resetEventForm();
+
+}
+
+
+
+/* =========================================================
+   RESET EVENT FORM
+   ========================================================= */
+
+function resetEventForm() {
 
   editingEventId =
     null;
@@ -1468,65 +2062,83 @@ function resetForm() {
 
 
   document
-    .getElementById('title')
+    .getElementById(
+      "eventTitle"
+    )
     .value =
-      '';
+    "";
 
 
   document
-    .getElementById('startTime')
+    .getElementById(
+      "startTime"
+    )
     .value =
-      '';
+    "";
 
 
   document
-    .getElementById('endTime')
+    .getElementById(
+      "endTime"
+    )
     .value =
-      '';
+    "";
 
 
   document
-    .getElementById('logoFile')
+    .getElementById(
+      "logoFile"
+    )
     .value =
-      '';
+    "";
 
 
   document
-    .getElementById('backgroundFile')
+    .getElementById(
+      "backgroundFile"
+    )
     .value =
-      '';
+    "";
 
 
   document
-    .getElementById('logoPreview')
+    .getElementById(
+      "logoPreview"
+    )
     .style.display =
-      'none';
+    "none";
 
 
   document
-    .getElementById('backgroundPreview')
+    .getElementById(
+      "backgroundPreview"
+    )
     .style.display =
-      'none';
+    "none";
 
 
   document
-    .getElementById('formHeading')
+    .getElementById(
+      "formHeading"
+    )
     .textContent =
-      'Add Event';
+    "Add Event";
 
 
   document
-    .getElementById('saveButton')
+    .getElementById(
+      "saveEventButton"
+    )
     .textContent =
-      'Save Event';
+    "Save Event";
 
 
   document
-    .getElementById('cancelEditButton')
-    .classList
-    .add(
-      'hidden'
-    );
+    .getElementById(
+      "cancelEditButton"
+    )
+    .style.display =
+    "none";
 
 
   setDefaultDate();
@@ -1534,616 +2146,117 @@ function resetForm() {
 }
 
 
-function cancelEdit() {
 
-  resetForm();
+/* =========================================================
+   FORMAT TIME
+   ========================================================= */
 
-
-  document
-    .getElementById('message')
-    .textContent =
-      '';
-
-}
-
-
-/* ============================================================
-   EVENT IMAGE PREVIEW
-   ============================================================ */
-
-document
-  .getElementById('logoFile')
-  .addEventListener(
-    'change',
-    function () {
-
-      previewFile(
-        this,
-        'logoPreview'
-      );
-
-    }
-  );
-
-
-document
-  .getElementById('backgroundFile')
-  .addEventListener(
-    'change',
-    function () {
-
-      previewFile(
-        this,
-        'backgroundPreview'
-      );
-
-    }
-  );
-
-
-function previewFile(
-  input,
-  imageId
+function formatTime(
+  value
 ) {
 
-  const file =
-    input.files[0];
+  if (!value) {
+    return "";
+  }
 
 
-  if (!file)
-    return;
-
-
-  const img =
-    document
-      .getElementById(
-        imageId
-      );
-
-
-  img.src =
-    URL.createObjectURL(
-      file
-    );
-
-
-  img.style.display =
-    'block';
-
-}
-
-
-/* ============================================================
-   IDLE IMAGE VALIDATION
-   ============================================================ */
-
-function validateIdleImage(
-  file
-) {
-
-  return new Promise(
-    (
-      resolve,
-      reject
-    ) => {
-
-      const img =
-        new Image();
-
-
-      const objectUrl =
-        URL.createObjectURL(
-          file
-        );
-
-
-      img.onload =
-        function () {
-
-          URL.revokeObjectURL(
-            objectUrl
-          );
-
-
-          if (
-            img.width !== 1920 ||
-            img.height !== 1200
-          ) {
-
-            reject(
-              new Error(
-                `${file.name} must be exactly 1920 × 1200 px. ` +
-                `Current size: ${img.width} × ${img.height}px.`
-              )
-            );
-
-            return;
-
-          }
-
-
-          resolve();
-
-        };
-
-
-      img.onerror =
-        function () {
-
-          URL.revokeObjectURL(
-            objectUrl
-          );
-
-
-          reject(
-            new Error(
-              `Could not read ${file.name}.`
-            )
-          );
-
-        };
-
-
-      img.src =
-        objectUrl;
-
-    }
+  return value.substring(
+    0,
+    5
   );
 
 }
 
 
-/* ============================================================
-   UPLOAD IDLE IMAGES
-   ============================================================ */
 
-async function uploadIdleImages() {
-
-  const input =
-    document
-      .getElementById(
-        'idleFiles'
-      );
-
-
-  const files =
-    Array.from(
-      input.files
-    );
-
-
-  const msg =
-    document
-      .getElementById(
-        'idleMessage'
-      );
-
-
-  if (
-    files.length === 0
-  ) {
-
-    msg.textContent =
-      'Please choose at least one image.';
-
-
-    msg.className =
-      'error';
-
-
-    return;
-
-  }
-
-
-  try {
-
-    msg.textContent =
-      'Checking and uploading images...';
-
-
-    msg.className =
-      '';
-
-
-    /*
-      Validate ALL images before uploading.
-    */
-
-    for (
-      const file of files
-    ) {
-
-      await validateIdleImage(
-        file
-      );
-
-    }
-
-
-    /*
-      Upload after validation succeeds.
-    */
-
-    for (
-      const file of files
-    ) {
-
-      const extension =
-        (
-          file.name
-            .split('.')
-            .pop()
-          ||
-          'jpg'
-        )
-        .toLowerCase();
-
-
-      const path =
-        `idle/${Date.now()}-${crypto.randomUUID()}.${extension}`;
-
-
-      const {
-        error
-      } =
-        await sb.storage
-          .from(
-            'event-assets'
-          )
-          .upload(
-            path,
-            file,
-            {
-              cacheControl:
-                '3600',
-
-              upsert:
-                false
-            }
-          );
-
-
-      if (error)
-        throw error;
-
-    }
-
-
-    input.value =
-      '';
-
-
-    msg.textContent =
-      files.length === 1
-        ?
-        'Idle image uploaded successfully.'
-        :
-        `${files.length} idle images uploaded successfully.`;
-
-
-    msg.className =
-      'success';
-
-
-    await loadIdleImages();
-
-  }
-
-  catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    msg.textContent =
-      'Error: ' +
-      error.message;
-
-
-    msg.className =
-      'error';
-
-  }
-
-}
-
-
-/* ============================================================
-   LOAD IDLE IMAGES
-   ============================================================ */
-
-async function loadIdleImages() {
-
-  const container =
-    document
-      .getElementById(
-        'idleImageList'
-      );
-
-
-  container.innerHTML =
-    '<div class="idle-empty">Loading idle images...</div>';
-
-
-  const {
-    data,
-    error
-  } =
-    await sb.storage
-      .from(
-        'event-assets'
-      )
-      .list(
-        'idle',
-        {
-          limit:
-            100,
-
-          sortBy: {
-            column:
-              'name',
-
-            order:
-              'asc'
-          }
-        }
-      );
-
-
-  if (error) {
-
-    container.innerHTML =
-      `<span class="error">${escapeHtml(error.message)}</span>`;
-
-    return;
-
-  }
-
-
-  const files =
-    (
-      data ||
-      []
-    )
-    .filter(
-      file =>
-        file.name &&
-        file.name !== '.emptyFolderPlaceholder'
-    );
-
-
-  if (
-    files.length === 0
-  ) {
-
-    container.innerHTML =
-      `
-      <div class="idle-empty">
-        No idle images uploaded yet.
-      </div>
-      `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    '';
-
-
-  files.forEach(
-    file => {
-
-      const path =
-        `idle/${file.name}`;
-
-
-      const {
-        data:
-          publicData
-      } =
-        sb.storage
-          .from(
-            'event-assets'
-          )
-          .getPublicUrl(
-            path
-          );
-
-
-      const card =
-        document
-          .createElement(
-            'div'
-          );
-
-
-      card.className =
-        'idle-card';
-
-
-      const image =
-        document
-          .createElement(
-            'img'
-          );
-
-
-      image.src =
-        publicData.publicUrl;
-
-
-      image.alt =
-        'Idle screen';
-
-
-      const body =
-        document
-          .createElement(
-            'div'
-          );
-
-
-      body.className =
-        'idle-card-body';
-
-
-      const filename =
-        document
-          .createElement(
-            'div'
-          );
-
-
-      filename.className =
-        'idle-filename';
-
-
-      filename.textContent =
-        file.name;
-
-
-      const deleteButton =
-        document
-          .createElement(
-            'button'
-          );
-
-
-      deleteButton.className =
-        'danger';
-
-
-      deleteButton.textContent =
-        'Delete';
-
-
-      deleteButton
-        .addEventListener(
-          'click',
-          function () {
-
-            deleteIdleImage(
-              file.name
-            );
-
-          }
-        );
-
-
-      body.appendChild(
-        filename
-      );
-
-
-      body.appendChild(
-        deleteButton
-      );
-
-
-      card.appendChild(
-        image
-      );
-
-
-      card.appendChild(
-        body
-      );
-
-
-      container.appendChild(
-        card
-      );
-
-    }
-  );
-
-}
-
-
-/* ============================================================
-   DELETE IDLE IMAGE
-   ============================================================ */
-
-async function deleteIdleImage(
-  filename
-) {
-
-  if (
-    !confirm(
-      'Delete this idle image?'
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  const {
-    error
-  } =
-    await sb.storage
-      .from(
-        'event-assets'
-      )
-      .remove([
-        `idle/${filename}`
-      ]);
-
-
-  if (error) {
-
-    alert(
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  await loadIdleImages();
-
-}
-
-
-/* ============================================================
-   SAFETY
-   ============================================================ */
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
 
 function escapeHtml(
   value
 ) {
 
-  const div =
-    document
-      .createElement(
-        'div'
-      );
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
 
 
-  div.textContent =
-    value;
+  return String(value)
 
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
 
-  return (
-    div.innerHTML
-  );
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
 
-/* ============================================================
+
+/* =========================================================
+   AUTH CHANGES
+   ========================================================= */
+
+sb.auth.onAuthStateChange(
+  (
+    event,
+    session
+  ) => {
+
+    if (
+      session
+    ) {
+
+      showAdmin();
+
+    }
+
+    else {
+
+      showLogin();
+
+    }
+
+  }
+);
+
+
+
+/* =========================================================
    START
-   ============================================================ */
+   ========================================================= */
 
 checkSession();
 
+
 </script>
 
+
 </body>
+
 </html>
