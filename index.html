@@ -16,7 +16,7 @@
   <style>
 
     /* =========================================================
-       COLORS
+       FLUTTER COLORS
        ========================================================= */
 
     :root {
@@ -102,13 +102,6 @@
     }
 
 
-    /*
-       Subtle dark overlay.
-
-       Keeps the brand background visible while ensuring
-       the schedule remains readable.
-    */
-
     .idle-screen::before {
 
       content: "";
@@ -119,9 +112,9 @@
       background:
         linear-gradient(
           90deg,
-          rgba(11,17,46,0.62) 0%,
-          rgba(11,17,46,0.42) 52%,
-          rgba(11,17,46,0.48) 100%
+          rgba(11,17,46,0.54) 0%,
+          rgba(11,17,46,0.34) 52%,
+          rgba(11,17,46,0.40) 100%
         );
 
       pointer-events: none;
@@ -242,7 +235,7 @@
 
 
     /* =========================================================
-       EVENTS SCHEDULE
+       DAILY EVENT SCHEDULE
        ========================================================= */
 
     .schedule-wrapper {
@@ -340,14 +333,6 @@
 
       padding-left: 34px;
 
-      /*
-         IMPORTANT:
-
-         No ellipsis.
-
-         Long event names wrap onto additional lines.
-      */
-
       white-space: normal;
 
       overflow-wrap: break-word;
@@ -359,7 +344,7 @@
 
 
     /* =========================================================
-       ACTIVE EVENT
+       ACTIVE EVENT SCREEN
        ========================================================= */
 
     .event-screen {
@@ -383,7 +368,7 @@
 
 
     /* =========================================================
-       LEFT SIDE — LOGO / EVENT IMAGE
+       LEFT SIDE — LOGO / DEPARTMENT IMAGE
        ========================================================= */
 
     .event-left {
@@ -431,8 +416,7 @@
           rgba(11,17,46,0)
         );
 
-      filter:
-        blur(10px);
+      filter: blur(10px);
 
       pointer-events: none;
 
@@ -521,9 +505,9 @@
       background:
         linear-gradient(
           135deg,
-          rgba(11,17,46,0.44) 0%,
-          rgba(11,17,46,0.26) 45%,
-          rgba(11,17,46,0.56) 100%
+          rgba(11,17,46,0.40) 0%,
+          rgba(11,17,46,0.20) 45%,
+          rgba(11,17,46,0.48) 100%
         );
 
       pointer-events: none;
@@ -535,7 +519,7 @@
 
 
     /* =========================================================
-       RIGHT TOP — TITLE + TIME
+       RIGHT TOP — EVENT TITLE + TIME
        ========================================================= */
 
     .event-top {
@@ -545,14 +529,21 @@
       z-index: 2;
 
       display: flex;
+
       flex-direction: column;
 
-      justify-content: flex-end;
+      /*
+         CHANGED:
+         Previously content was pushed to the bottom.
+         Now it starts near the top.
+      */
+
+      justify-content: flex-start;
 
       padding:
-        70px
+        110px
         80px
-        62px;
+        40px;
 
     }
 
@@ -562,17 +553,25 @@
       color:
         var(--white);
 
-      font-size: 82px;
+      /*
+         CHANGED:
+         Was 82px.
+         Now ~20% larger.
+      */
+
+      font-size: 98px;
 
       font-weight: 700;
 
-      line-height: 1;
+      line-height: 0.98;
 
       letter-spacing:
         -0.035em;
 
       overflow-wrap:
         break-word;
+
+      max-width: 100%;
 
     }
 
@@ -586,7 +585,7 @@
 
       font-weight: 700;
 
-      margin-top: 30px;
+      margin-top: 28px;
 
     }
 
@@ -618,7 +617,10 @@
     .progress-box {
 
       width: 100%;
+
       height: 78%;
+
+      min-height: 230px;
 
       display: flex;
 
@@ -643,6 +645,8 @@
         0 0 50px
         rgba(213,34,93,0.19);
 
+      overflow: hidden;
+
     }
 
 
@@ -651,14 +655,35 @@
       color:
         var(--white);
 
-      font-size: 76px;
+      /*
+         CHANGED:
+         Huge status text.
+      */
+
+      font-size:
+        clamp(
+          82px,
+          5.7vw,
+          110px
+        );
 
       font-weight: 700;
 
+      line-height: 1;
+
       letter-spacing:
-        0.045em;
+        0.015em;
 
       text-align: center;
+
+      /*
+         Target approximately 85% of
+         the available red box width.
+      */
+
+      width: 85%;
+
+      white-space: nowrap;
 
     }
 
@@ -711,7 +736,7 @@
 
 
     /* =========================================================
-       SMALLER SCREENS / NAVIGATOR FALLBACK
+       SMALLER SCREEN FALLBACK
        ========================================================= */
 
     @media (max-width: 1500px) {
@@ -779,9 +804,19 @@
       }
 
 
+      .event-top {
+
+        padding:
+          85px
+          65px
+          35px;
+
+      }
+
+
       .event-title {
 
-        font-size: 68px;
+        font-size: 82px;
 
       }
 
@@ -795,7 +830,12 @@
 
       .progress-text {
 
-        font-size: 64px;
+        font-size:
+          clamp(
+            70px,
+            5.6vw,
+            92px
+          );
 
       }
 
@@ -1080,7 +1120,7 @@
 
 
     /* =========================================================
-       HTML ESCAPE
+       ESCAPE HTML
        ========================================================= */
 
     function escapeHtml(
@@ -1226,7 +1266,7 @@
 
 
     /* =========================================================
-       ACTIVE EVENT
+       FIND CURRENT EVENT
        ========================================================= */
 
     function getCurrentEvent() {
@@ -1267,7 +1307,7 @@
 
 
     /* =========================================================
-       DATE HTML
+       DATE BLOCK
        ========================================================= */
 
     function getDateBlockHtml() {
@@ -1316,13 +1356,6 @@
         );
 
 
-      /*
-         Cache busting once per minute.
-
-         This means replacing the idle background
-         in Supabase will automatically update the display.
-      */
-
       const background =
 
         IDLE_BACKGROUND_URL +
@@ -1341,7 +1374,7 @@
 
 
       /* =======================================================
-         NO EVENTS TODAY
+         NO EVENTS
          ======================================================= */
 
       if (
@@ -1375,10 +1408,14 @@
               ${dateHtml}
 
 
-              <div class="no-events-wrapper">
+              <div
+                class="no-events-wrapper"
+              >
 
 
-                <div class="no-events">
+                <div
+                  class="no-events"
+                >
 
                   NO EVENTS
 
@@ -1718,7 +1755,7 @@
 
 
     /* =========================================================
-       ERROR SCREEN
+       ERROR
        ========================================================= */
 
     function renderError(
@@ -1771,8 +1808,7 @@
 
 
       /*
-         Automatically reload the events when the date
-         changes at midnight.
+         Automatically refresh after midnight.
       */
 
       if (
@@ -1786,7 +1822,6 @@
 
 
         loadEvents();
-
 
         return;
 
