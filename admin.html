@@ -1928,4 +1928,477 @@ async function loadEvents() {
     );
 
 
-  list.inner
+  list.innerHTML =
+    "Loading events...";
+
+
+  const result =
+    await sb
+      .from("events")
+      .select("*")
+      .gte(
+        "event_date",
+        getTodayDate()
+      )
+      .order(
+        "event_date",
+        {
+          ascending: true
+        }
+      )
+      .order(
+        "start_time",
+        {
+          ascending: true
+        }
+      );
+
+
+  if (result.error) {
+
+    list.innerHTML =
+      '<div class="error">' +
+      result.error.message +
+      "</div>";
+
+    return;
+
+  }
+
+
+  const data =
+    result.data;
+
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    list.innerHTML =
+      '<p style="color:#64748b;">No upcoming events.</p>';
+
+    return;
+
+  }
+
+
+  list.innerHTML = "";
+
+
+  data.forEach(
+    function(event) {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "event-card";
+
+
+      card.innerHTML = `
+
+        <div class="event-header">
+
+          <div>
+
+            <div class="event-title">
+              ${escapeHtml(event.title)}
+            </div>
+
+            <div class="event-meta">
+
+              ${escapeHtml(event.event_date)}
+
+              &nbsp; • &nbsp;
+
+              ${formatTime(event.start_time)}
+
+              –
+
+              ${formatTime(event.end_time)}
+
+            </div>
+
+          </div>
+
+          <div class="event-actions">
+
+            <button
+              class="secondary"
+              onclick="editEvent(${event.id})"
+            >
+              Edit
+            </button>
+
+            <button
+              class="danger"
+              onclick="deleteEvent(${event.id})"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      list.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+
+/* =========================================================
+   EDIT / DELETE
+   ========================================================= */
+
+async function editEvent(id) {
+
+  const result =
+    await sb
+      .from("events")
+      .select("*")
+      .eq(
+        "id",
+        id
+      )
+      .single();
+
+
+  if (result.error) {
+
+    alert(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  const data =
+    result.data;
+
+
+  editingEventId =
+    data.id;
+
+
+  existingLogoUrl =
+    data.logo_url;
+
+
+  existingBackgroundUrl =
+    data.background_url;
+
+
+  document.getElementById(
+    "eventDate"
+  ).value =
+    data.event_date;
+
+
+  document.getElementById(
+    "eventTitle"
+  ).value =
+    data.title;
+
+
+  document.getElementById(
+    "startTime"
+  ).value =
+    formatTime(
+      data.start_time
+    );
+
+
+  document.getElementById(
+    "endTime"
+  ).value =
+    formatTime(
+      data.end_time
+    );
+
+
+  const logoPreview =
+    document.getElementById(
+      "logoPreview"
+    );
+
+
+  if (data.logo_url) {
+
+    logoPreview.src =
+      data.logo_url;
+
+    logoPreview.style.display =
+      "block";
+
+  }
+
+  else {
+
+    logoPreview.style.display =
+      "none";
+
+  }
+
+
+  const backgroundPreview =
+    document.getElementById(
+      "backgroundPreview"
+    );
+
+
+  if (data.background_url) {
+
+    backgroundPreview.src =
+      data.background_url;
+
+    backgroundPreview.style.display =
+      "block";
+
+  }
+
+  else {
+
+    backgroundPreview.style.display =
+      "none";
+
+  }
+
+
+  document.getElementById(
+    "formHeading"
+  ).textContent =
+    "Edit Event";
+
+
+  document.getElementById(
+    "saveEventButton"
+  ).textContent =
+    "Update Event";
+
+
+  document.getElementById(
+    "cancelEditButton"
+  ).style.display =
+    "inline-block";
+
+}
+
+
+
+async function deleteEvent(id) {
+
+  if (
+    !confirm(
+      "Delete this event?"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const result =
+    await sb
+      .from("events")
+      .delete()
+      .eq(
+        "id",
+        id
+      );
+
+
+  if (result.error) {
+
+    alert(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  if (
+    editingEventId === id
+  ) {
+
+    resetEventForm();
+
+  }
+
+
+  loadEvents();
+
+}
+
+
+
+function cancelEdit() {
+
+  resetEventForm();
+
+}
+
+
+
+function resetEventForm() {
+
+  editingEventId =
+    null;
+
+
+  existingLogoUrl =
+    null;
+
+
+  existingBackgroundUrl =
+    null;
+
+
+  document.getElementById(
+    "eventTitle"
+  ).value = "";
+
+
+  document.getElementById(
+    "startTime"
+  ).value = "";
+
+
+  document.getElementById(
+    "endTime"
+  ).value = "";
+
+
+  document.getElementById(
+    "logoFile"
+  ).value = "";
+
+
+  document.getElementById(
+    "backgroundFile"
+  ).value = "";
+
+
+  document.getElementById(
+    "logoPreview"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "backgroundPreview"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "formHeading"
+  ).textContent =
+    "Add Event";
+
+
+  document.getElementById(
+    "saveEventButton"
+  ).textContent =
+    "Save Event";
+
+
+  document.getElementById(
+    "cancelEditButton"
+  ).style.display =
+    "none";
+
+
+  setDefaultDate();
+
+}
+
+
+
+function formatTime(value) {
+
+  if (!value) {
+    return "";
+  }
+
+
+  return value.substring(
+    0,
+    5
+  );
+
+}
+
+
+
+function escapeHtml(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(/&/g, "&amp;")
+
+    .replace(/</g, "&lt;")
+
+    .replace(/>/g, "&gt;")
+
+    .replace(/"/g, "&quot;")
+
+    .replace(/'/g, "&#039;");
+
+}
+
+
+
+sb.auth.onAuthStateChange(
+  function(event, session) {
+
+    if (session) {
+
+      showAdmin();
+
+    }
+
+    else {
+
+      showLogin();
+
+    }
+
+  }
+);
+
+
+checkSession();
+
+</script>
+
+</body>
+
+</html>
