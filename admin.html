@@ -27,6 +27,27 @@ button{border:0;border-radius:8px;padding:12px 18px;font-size:14px;font-weight:7
 <div class="field"><label>Email</label><input id="loginEmail" type="email"></div><div class="field"><label>Password</label><input id="loginPassword" type="password"></div>
 <button class="primary" onclick="login()">Sign in</button><div id="loginMessage" class="message"></div></div></div>
 
+
+<div id="recoverySection" style="display:none;max-width:500px;margin:100px auto;">
+  <div class="card">
+    <h1>Set New Password</h1>
+    <p class="subtitle">Choose a new password for your Room Navigator Events admin account.</p>
+
+    <div class="field">
+      <label>New Password</label>
+      <input id="newPassword" type="password" autocomplete="new-password" placeholder="Enter new password">
+    </div>
+
+    <div class="field">
+      <label>Confirm New Password</label>
+      <input id="confirmNewPassword" type="password" autocomplete="new-password" placeholder="Re-enter new password">
+    </div>
+
+    <button class="primary" onclick="setNewPassword()">Set New Password</button>
+    <div id="recoveryMessage" class="message"></div>
+  </div>
+</div>
+
 <div id="adminSection" class="container">
 <div class="header"><div><h1>Room Navigator Events</h1><p>Cluj event signage management</p></div><button class="secondary" onclick="logout()">Sign out</button></div>
 
@@ -93,12 +114,87 @@ const DEFAULT_IDLE_LAYOUT={listTop:335,listX:0,rowGap:22,timeColumnWidth:250,tim
 const DEFAULT_AVAILABLE_LAYOUT={fontSize:60,bold:false,x:0,y:0,lineWidth:145,lineHeight:7,lineGap:28};
 const DEFAULT_ACTIVE_LAYOUT={titleFontSize:82,titleBold:true,titleX:0,titleY:0,timeFontSize:46,timeBold:true,timeX:0,timeY:0,progressTextFontSize:64,progressTextBold:true,progressTextX:0,progressTextY:0,progressBoxWidth:100,progressBoxHeight:78,progressBoxX:0,progressBoxY:0,leftImageScale:100,leftImageX:0,leftImageY:0};
 let editingEventId=null,existingLogoUrl=null,existingBackgroundUrl=null;
+let recoveryMode=window.location.hash.indexOf("type=recovery")!==-1||window.location.search.indexOf("type=recovery")!==-1;
 function msg(id,t,type){const e=document.getElementById(id);e.textContent=t||"";e.className="message"+(type?" "+type:"")}
-async function login(){const email=loginEmail.value.trim(),password=loginPassword.value;msg("loginMessage","Signing in...");const r=await sb.auth.signInWithPassword({email,password});if(r.error)return msg("loginMessage",r.error.message,"error");showAdmin()}
-async function logout(){await sb.auth.signOut();showLogin()}
-async function checkSession(){const r=await sb.auth.getSession();r.data&&r.data.session?showAdmin():showLogin()}
-function showAdmin(){loginSection.style.display="none";adminSection.style.display="block";setDefaultDate();showIdleBackground();loadIdleLayoutSettings();loadAvailableSettings();loadActiveLayoutSettings();loadEvents()}
-function showLogin(){adminSection.style.display="none";loginSection.style.display="block"}
+async function login(){
+  const email=loginEmail.value.trim(),password=loginPassword.value;
+  msg("loginMessage","Signing in...");
+  const r=await sb.auth.signInWithPassword({email,password});
+  if(r.error)return msg("loginMessage",r.error.message,"error");
+  recoveryMode=false;
+  showAdmin();
+}
+async function logout(){
+  await sb.auth.signOut();
+  recoveryMode=false;
+  showLogin();
+}
+async function checkSession(){
+  const r=await sb.auth.getSession();
+  if(recoveryMode){
+    showRecovery();
+    return;
+  }
+  if(r.data&&r.data.session)showAdmin();
+  else showLogin();
+}
+function showRecovery(){
+  loginSection.style.display="none";
+  adminSection.style.display="none";
+  recoverySection.style.display="block";
+}
+function showAdmin(){
+  loginSection.style.display="none";
+  recoverySection.style.display="none";
+  adminSection.style.display="block";
+  setDefaultDate();
+  showIdleBackground();
+  loadIdleLayoutSettings();
+  loadAvailableSettings();
+  loadActiveLayoutSettings();
+  loadEvents();
+}
+function showLogin(){
+  adminSection.style.display="none";
+  recoverySection.style.display="none";
+  loginSection.style.display="block";
+}
+async function setNewPassword(){
+  const password=newPassword.value;
+  const confirmPassword=confirmNewPassword.value;
+
+  if(!password||password.length<8){
+    msg("recoveryMessage","Please use a password with at least 8 characters.","error");
+    return;
+  }
+
+  if(password!==confirmPassword){
+    msg("recoveryMessage","The two passwords do not match.","error");
+    return;
+  }
+
+  msg("recoveryMessage","Updating password...");
+
+  const r=await sb.auth.updateUser({password:password});
+
+  if(r.error){
+    msg("recoveryMessage",r.error.message,"error");
+    return;
+  }
+
+  msg("recoveryMessage","Password updated. You can now sign in with the new password.","success");
+  recoveryMode=false;
+
+  setTimeout(async function(){
+    await sb.auth.signOut();
+    try{
+      history.replaceState({},document.title,window.location.pathname);
+    }catch(e){}
+    newPassword.value="";
+    confirmNewPassword.value="";
+    showLogin();
+  },1200);
+}
 function getTodayDate(){return new Intl.DateTimeFormat("en-CA",{timeZone:TIME_ZONE,year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date())}
 function setDefaultDate(){if(!eventDate.value)eventDate.value=getTodayDate()}
 function publicUrl(path){return sb.storage.from("event-assets").getPublicUrl(path).data.publicUrl}
@@ -135,7 +231,22 @@ function cancelEdit(){resetEventForm()}
 function resetEventForm(){editingEventId=null;existingLogoUrl=null;existingBackgroundUrl=null;eventTitle.value="";startTime.value="";endTime.value="";logoFile.value="";backgroundFile.value="";logoPreview.style.display="none";backgroundPreview.style.display="none";formHeading.textContent="Add Event";saveEventButton.textContent="Save Event";cancelEditButton.style.display="none";setDefaultDate()}
 function formatTime(v){return v?v.substring(0,5):""}
 function escapeHtml(v){if(v==null)return"";return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-sb.auth.onAuthStateChange((e,s)=>s?showAdmin():showLogin());checkSession();
+sb.auth.onAuthStateChange(function(event,session){
+  if(event==="PASSWORD_RECOVERY"){
+    recoveryMode=true;
+    showRecovery();
+    return;
+  }
+
+  if(recoveryMode){
+    showRecovery();
+    return;
+  }
+
+  if(session)showAdmin();
+  else showLogin();
+});
+checkSession();
 </script>
 </body>
 </html>
