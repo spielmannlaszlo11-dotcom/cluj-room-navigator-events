@@ -159,7 +159,7 @@ function getActiveVariables(){
 }
 function renderIdle(){
   const app=document.getElementById("app");
-  const background=IDLE_BACKGROUND_URL+"?v="+Math.floor(Date.now()/60000);
+  const background=IDLE_BACKGROUND_URL;
   const remaining=getRemainingEvents(),vars=getIdleVariables();
 
   if(!remaining.length){
