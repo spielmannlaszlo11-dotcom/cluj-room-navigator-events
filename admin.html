@@ -110,10 +110,11 @@ const SUPABASE_KEY="sb_publishable_WRI3MJLwDSP4wJscWdBmhA_t50js1al";
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const TIME_ZONE="Europe/Bucharest";
 const IDLE_BACKGROUND_PATH="idle/idle-background",IDLE_LAYOUT_PATH="settings/idle-layout.json",AVAILABLE_LAYOUT_PATH="settings/available-layout.json",ACTIVE_LAYOUT_PATH="settings/active-layout.json";
-const DEFAULT_IDLE_LAYOUT={listTop:335,listX:0,rowGap:22,timeColumnWidth:250,timeFontSize:34,timeBold:false,timeX:0,timeY:0,titleFontSize:38,titleBold:false,titleX:0,titleY:0};
+const DEFAULT_IDLE_LAYOUT={listTop:335,listX:0,rowGap:22,timeColumnWidth:250,timeFontSize:34,timeBold:false,timeX:0,timeY:0,titleFontSize:38,titleBold:false,titleX:0,titleY:0,backgroundVersion:1};
 const DEFAULT_AVAILABLE_LAYOUT={fontSize:60,bold:false,x:0,y:0,lineWidth:145,lineHeight:7,lineGap:28};
 const DEFAULT_ACTIVE_LAYOUT={titleFontSize:82,titleBold:true,titleX:0,titleY:0,timeFontSize:46,timeBold:true,timeX:0,timeY:0,progressTextFontSize:64,progressTextBold:true,progressTextX:0,progressTextY:0,progressBoxWidth:100,progressBoxHeight:78,progressBoxX:0,progressBoxY:0,leftImageScale:100,leftImageX:0,leftImageY:0};
 let editingEventId=null,existingLogoUrl=null,existingBackgroundUrl=null;
+let idleBackgroundVersion=1;
 let recoveryMode=window.location.hash.indexOf("type=recovery")!==-1||window.location.search.indexOf("type=recovery")!==-1;
 function msg(id,t,type){const e=document.getElementById(id);e.textContent=t||"";e.className="message"+(type?" "+type:"")}
 async function login(){
@@ -198,15 +199,51 @@ async function setNewPassword(){
 function getTodayDate(){return new Intl.DateTimeFormat("en-CA",{timeZone:TIME_ZONE,year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date())}
 function setDefaultDate(){if(!eventDate.value)eventDate.value=getTodayDate()}
 function publicUrl(path){return sb.storage.from("event-assets").getPublicUrl(path).data.publicUrl}
-function showIdleBackground(){idleBackgroundPreview.src=publicUrl(IDLE_BACKGROUND_PATH)+"?t="+Date.now()}
+function showIdleBackground(){idleBackgroundPreview.src=publicUrl(IDLE_BACKGROUND_PATH)+"?v="+String(idleBackgroundVersion||1)}
 idleBackgroundFile.addEventListener("change",function(){if(this.files[0])idleBackgroundPreview.src=URL.createObjectURL(this.files[0])})
-async function saveIdleBackground(){const f=idleBackgroundFile.files[0];if(!f)return msg("idleMessage","Please choose an image first.","error");const r=await sb.storage.from("event-assets").upload(IDLE_BACKGROUND_PATH,f,{upsert:true,contentType:f.type,cacheControl:"60"});if(r.error)return msg("idleMessage",r.error.message,"error");idleBackgroundFile.value="";showIdleBackground();msg("idleMessage","Idle background updated successfully.","success")}
-async function deleteIdleBackground(){if(!confirm("Remove the current idle background?"))return;const r=await sb.storage.from("event-assets").remove([IDLE_BACKGROUND_PATH]);if(r.error)return msg("idleMessage",r.error.message,"error");idleBackgroundPreview.removeAttribute("src");msg("idleMessage","Idle background removed.","success")}
+async function saveIdleBackground(){
+  const f=idleBackgroundFile.files[0];
+  if(!f)return msg("idleMessage","Please choose an image first.","error");
+
+  const r=await sb.storage.from("event-assets").upload(
+    IDLE_BACKGROUND_PATH,
+    f,
+    {upsert:true,contentType:f.type,cacheControl:"31536000"}
+  );
+
+  if(r.error)return msg("idleMessage",r.error.message,"error");
+
+  idleBackgroundVersion=Date.now();
+
+  const currentLayout=await loadJson(IDLE_LAYOUT_PATH,DEFAULT_IDLE_LAYOUT);
+  currentLayout.backgroundVersion=idleBackgroundVersion;
+  const vr=await saveJson(IDLE_LAYOUT_PATH,currentLayout);
+
+  if(vr.error)return msg("idleMessage","Background uploaded, but version update failed: "+vr.error.message,"error");
+
+  idleBackgroundFile.value="";
+  idleBackgroundPreview.src=publicUrl(IDLE_BACKGROUND_PATH)+"?v="+idleBackgroundVersion;
+  msg("idleMessage","Idle background updated successfully.","success");
+}
+async function deleteIdleBackground(){
+  if(!confirm("Remove the current idle background?"))return;
+
+  const r=await sb.storage.from("event-assets").remove([IDLE_BACKGROUND_PATH]);
+  if(r.error)return msg("idleMessage",r.error.message,"error");
+
+  idleBackgroundVersion=Date.now();
+  const currentLayout=await loadJson(IDLE_LAYOUT_PATH,DEFAULT_IDLE_LAYOUT);
+  currentLayout.backgroundVersion=idleBackgroundVersion;
+  await saveJson(IDLE_LAYOUT_PATH,currentLayout);
+
+  idleBackgroundPreview.removeAttribute("src");
+  msg("idleMessage","Idle background removed.","success");
+}
 async function loadJson(path,d){try{const r=await fetch(publicUrl(path)+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)return {...d};return {...d,...await r.json()}}catch(e){return {...d}}}
 async function saveJson(path,o){const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"});return await sb.storage.from("event-assets").upload(path,b,{upsert:true,contentType:"application/json",cacheControl:"30"})}
 function populateIdle(s){layoutListTop.value=s.listTop;layoutListX.value=s.listX;layoutRowGap.value=s.rowGap;layoutTimeColumnWidth.value=s.timeColumnWidth;layoutTimeSize.value=s.timeFontSize;layoutTimeBold.checked=s.timeBold;layoutTimeX.value=s.timeX;layoutTimeY.value=s.timeY;layoutTitleSize.value=s.titleFontSize;layoutTitleBold.checked=s.titleBold;layoutTitleX.value=s.titleX;layoutTitleY.value=s.titleY}
-async function loadIdleLayoutSettings(){populateIdle(await loadJson(IDLE_LAYOUT_PATH,DEFAULT_IDLE_LAYOUT))}
-function readIdle(){return{listTop:+layoutListTop.value,listX:+layoutListX.value,rowGap:+layoutRowGap.value,timeColumnWidth:+layoutTimeColumnWidth.value,timeFontSize:+layoutTimeSize.value,timeBold:layoutTimeBold.checked,timeX:+layoutTimeX.value,timeY:+layoutTimeY.value,titleFontSize:+layoutTitleSize.value,titleBold:layoutTitleBold.checked,titleX:+layoutTitleX.value,titleY:+layoutTitleY.value}}
+async function loadIdleLayoutSettings(){const s=await loadJson(IDLE_LAYOUT_PATH,DEFAULT_IDLE_LAYOUT);idleBackgroundVersion=s.backgroundVersion||1;populateIdle(s)}
+function readIdle(){return{listTop:+layoutListTop.value,listX:+layoutListX.value,rowGap:+layoutRowGap.value,timeColumnWidth:+layoutTimeColumnWidth.value,timeFontSize:+layoutTimeSize.value,timeBold:layoutTimeBold.checked,timeX:+layoutTimeX.value,timeY:+layoutTimeY.value,titleFontSize:+layoutTitleSize.value,titleBold:layoutTitleBold.checked,titleX:+layoutTitleX.value,titleY:+layoutTitleY.value,backgroundVersion:idleBackgroundVersion}}
 async function saveIdleLayoutSettings(){const r=await saveJson(IDLE_LAYOUT_PATH,readIdle());r.error?msg("layoutMessage","Error: "+r.error.message,"error"):msg("layoutMessage","Idle settings saved.","success")}
 async function resetIdleLayoutSettings(){populateIdle(DEFAULT_IDLE_LAYOUT);await saveIdleLayoutSettings()}
 function populateAvailable(s){availableFontSize.value=s.fontSize;availableBold.checked=s.bold;availableX.value=s.x;availableY.value=s.y;availableLineWidth.value=s.lineWidth;availableLineHeight.value=s.lineHeight;availableLineGap.value=s.lineGap}

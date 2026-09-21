@@ -49,7 +49,7 @@ const IDLE_LAYOUT_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/setti
 const AVAILABLE_LAYOUT_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/settings/available-layout.json";
 const ACTIVE_LAYOUT_URL=SUPABASE_URL+"/storage/v1/object/public/event-assets/settings/active-layout.json";
 
-const DEFAULT_IDLE_LAYOUT={listTop:335,listX:0,rowGap:22,timeColumnWidth:250,timeFontSize:34,timeBold:false,timeX:0,timeY:0,titleFontSize:38,titleBold:false,titleX:0,titleY:0};
+const DEFAULT_IDLE_LAYOUT={listTop:335,listX:0,rowGap:22,timeColumnWidth:250,timeFontSize:34,timeBold:false,timeX:0,timeY:0,titleFontSize:38,titleBold:false,titleX:0,titleY:0,backgroundVersion:1};
 const DEFAULT_AVAILABLE_LAYOUT={fontSize:60,bold:false,x:0,y:0,lineWidth:145,lineHeight:7,lineGap:28};
 const DEFAULT_ACTIVE_LAYOUT={titleFontSize:82,titleBold:true,titleX:0,titleY:0,timeFontSize:46,timeBold:true,timeX:0,timeY:0,progressTextFontSize:64,progressTextBold:true,progressTextX:0,progressTextY:0,progressBoxWidth:100,progressBoxHeight:78,progressBoxX:0,progressBoxY:0,leftImageScale:100,leftImageX:0,leftImageY:0};
 
@@ -159,7 +159,7 @@ function getActiveVariables(){
 }
 function renderIdle(){
   const app=document.getElementById("app");
-  const background=IDLE_BACKGROUND_URL;
+  const background=IDLE_BACKGROUND_URL+"?v="+String(idleLayout.backgroundVersion||1);
   const remaining=getRemainingEvents(),vars=getIdleVariables();
 
   if(!remaining.length){
